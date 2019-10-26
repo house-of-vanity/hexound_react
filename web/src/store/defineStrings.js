@@ -1,0 +1,3 @@
+export const GET_TRACK_LIST = 'GET_TRACK_LIST';
+export const TOGGLE_PLAY = 'TOGGLE_PLAY';
+export const CURRENT_TRACK = 'CURRENT_TRACK';

@@ -1,26 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
+import { Provider } from 'react-redux';
+import { store } from './store/store';
 import './App.css';
+import TrackListContainer from './components/TackList/TrackListContainer';
+import PultContainer from './components/Pult/PultContainer';
+import GrabnDropContainer from './components/GrabnDrop/GrabnDropContainer';
+import { Credits } from './components/Credits/Credits';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  render(){
+    return (
+      <Provider store={store}>
+        <div>
+          <GrabnDropContainer/>
+          <h1>hexor</h1>
+          <PultContainer/>
+          <TrackListContainer/>
+          <Credits/>
+        </div>
+      </Provider>
+    );
+  }  
 }
 
 export default App;
