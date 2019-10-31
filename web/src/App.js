@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { Provider } from 'react-redux';
 import { store } from './store/store';
 import './App.css';
@@ -8,7 +8,8 @@ import GrabnDropContainer from './components/GrabnDrop/GrabnDropContainer';
 import { Credits } from './components/Credits/Credits';
 
 class App extends Component {
-  
+
+
   render(){
     return (
       <Provider store={store}>
