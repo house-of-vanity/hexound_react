@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import TrackList from './TrackList';
-import { getTrackList } from '../../store/actions'; 
+import { getTrackList, setCurrentTrack } from '../../store/actions'; 
 import { getUrlByMethodParams } from '../../utils';
 import { methodGetTrackList, baseUrl } from '../../define';
 
@@ -21,6 +21,7 @@ class TrackListContainer extends Component{
         return(
             <TrackList
                 trackList={this.props.trackList}
+                setCurrentTrack={this.props.setCurrentTrack}
             />
         )
     }
@@ -32,7 +33,8 @@ const mapStateToProps = state => {
     };
 };
 const mapDispatchToProps = {
-    getTrackList: getTrackList
+    getTrackList: getTrackList,
+    setCurrentTrack: setCurrentTrack
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TrackListContainer);
