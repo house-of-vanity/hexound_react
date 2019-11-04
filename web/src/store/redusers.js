@@ -1,10 +1,22 @@
 
 import { combineReducers } from "redux"; 
 import { GET_TRACK_LIST,  TOGGLE_PLAY, CURRENT_TRACK } from './defineStrings';
+
+// Инициализация библионетеки для компилации музыки
+window.libopenmpt = window.Module;
+
+const getPlayer = () => {
+    const ChiptuneJsConfig = window.ChiptuneJsConfig;
+    const ChiptuneJsPlayer = window.ChiptuneJsPlayer;
+    const player = new ChiptuneJsPlayer(new ChiptuneJsConfig(0));
+    return player;
+}
+
 const defaultState = {
     trackList: [],
     isPlay: false,
-    currentTrack: null
+    currentTrack: null,
+    player: getPlayer()
 }
 
 export const playerReduser = ( state = defaultState, action ) => {

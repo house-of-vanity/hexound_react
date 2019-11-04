@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import { baseUrl } from '../../define';
+
+
 
 export default class Pult extends Component{
     componentDidMount(){
-        window.libopenmpt = window.Module;
     }
 
     render(){       
@@ -15,7 +17,17 @@ export default class Pult extends Component{
                     style={{
                         cursor:'pointer'
                     }}
-                    onClick={()=>(togglePlay(!play))}>{
+                    onClick={
+                        ()=>{
+                            togglePlay(!play);
+                            (()=>{
+                                /* TODO удалить */
+                                this.props.player.load(`${baseUrl}mod/daddy_freddy-under_the_bridge.mod`, (buffer)=>{
+                                    this.props.player.play(buffer);
+                                })
+                            })()
+                        }
+                    }>{
                     (play)
                     ? 'pause'
                     : 'play'
