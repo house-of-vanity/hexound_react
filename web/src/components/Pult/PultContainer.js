@@ -5,12 +5,13 @@ import { getTrackList, togglePlay, setCurrentTrack } from '../../store/actions';
 
 class PultContainer extends Component{
     render(){
-        const { trackList, track, play} = this.props;
+        const { trackList, track, play, togglePlay} = this.props;
         return(
             <Pult
                 trackList={trackList}
                 track={track}
                 play={play}
+                togglePlay={togglePlay}
             />
         )
     }
