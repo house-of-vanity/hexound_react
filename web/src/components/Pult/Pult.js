@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 
 export default class Pult extends Component{
+    componentDidMount(){
+        window.libopenmpt = window.Module;
+    }
+
     render(){       
         const { trackList: list, track, play, togglePlay } = this.props;
         const currentTrackName = (track === null) ? '' : track.filename;
