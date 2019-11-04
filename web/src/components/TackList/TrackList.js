@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import { getTemplateDate } from '../../utils';
 export default class TrackList extends Component{
     handleOnClick = (obj)=> {
-        const { trackList: list } = this.props;
         this.props.setCurrentTrack(obj);
     }
     render(){        
-        const { trackList: list } = this.props;
+        const { trackList: list, hendleGetTracks } = this.props;
         return(
             <div>
             <h2>TrackList</h2>
@@ -22,6 +21,7 @@ export default class TrackList extends Component{
                         ))
                      }
                 </ul>
+                <div onClick={hendleGetTracks}>Ещё</div>
             </div>
         )
     }

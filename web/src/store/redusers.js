@@ -10,7 +10,7 @@ const defaultState = {
 export const playerReduser = ( state = defaultState, action ) => {
     switch( action.type ){
         case GET_TRACK_LIST:
-            return { ...state, trackList: action.payload }
+            return { ...state, trackList: [ ...state.trackList, ...action.payload] }
         case TOGGLE_PLAY:
             return { ...state, isPlay: action.payload }
         case CURRENT_TRACK: 
