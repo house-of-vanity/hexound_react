@@ -10,13 +10,24 @@ export default class Pult extends Component{
 
     handlePlayPause = () => {
         /* TODO set load track in player */
-        const {track, play, togglePlay, currentPlayingNode } = this.props;
-        togglePlay(!play);
+        const {play, togglePlay, isDeTouch } = this.props;
+        if(!isDeTouch){
+            togglePlay(!play);
+        }        
+    }
+
+    handleStop = () => {
+        const {stop, isDeTouch } = this.props;
+        if(!isDeTouch){
+            stop();
+        } 
     }
 
     render(){       
-        const { handlePlayPause } = this;
+        const { handlePlayPause, handleStop } = this;
         const { trackList: list, track, play, stop} = this.props;
+
+
         const currentTrackName = (track === null) ? '' : track.filename;
         return(
             <div>
@@ -25,13 +36,13 @@ export default class Pult extends Component{
                     style={{
                         cursor:'pointer'
                     }}
-                    onClick={handlePlayPause}>{
+                    onClick={ handlePlayPause }>{
                     (play)
                     ? 'pause'
                     : 'play'
                 }</span>
                 <div>
-                    <h4 onClick={stop}>STOP</h4>
+                    <h4 onClick={handleStop}>STOP</h4>
                 </div>
             </div>           
         )

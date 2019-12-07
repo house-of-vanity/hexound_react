@@ -5,7 +5,7 @@ import { getTrackList, togglePlay, setCurrentTrack, stop } from '../../store/act
 
 class PultContainer extends Component{
     render(){
-        const { trackList, track, play, togglePlay, player, currentPlayingNode, stop } = this.props;
+        const { trackList, track, play, togglePlay, player, currentPlayingNode, stop, isDeTouch } = this.props;
         return(
             <Pult
                 trackList={trackList}
@@ -15,6 +15,7 @@ class PultContainer extends Component{
                 player={player}
                 currentPlayingNode={currentPlayingNode}
                 stop={stop}
+                isDeTouch={isDeTouch}
             />
         )
     }
@@ -26,7 +27,8 @@ const mapStateToProps = state => {
         track: state.playerData.currentTrack,
         play: state.playerData.isPlay, 
         player: state.playerData.player,
-        currentPlayingNode: state.playerData.currentPlayingNode
+        currentPlayingNode: state.playerData.currentPlayingNode,
+        isDeTouch: state.playerData.isDeTouch
     };
 };
 const mapDispatchToProps = {

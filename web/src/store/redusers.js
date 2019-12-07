@@ -4,7 +4,8 @@ import {
     GET_TRACK_LIST,  
     TOGGLE_PLAY, CURRENT_TRACK, 
     SET_CURRENT_PLAYER_EXAMPLE, 
-    SET_CURRENT_TRACK_BUFFER 
+    SET_CURRENT_TRACK_BUFFER,
+    SET_DETOUCH_STADIA
 } from './defineStrings';
 
 // Инициализация библионетеки для компилации музыки
@@ -36,6 +37,8 @@ export const playerReduser = ( state = defaultState, action ) => {
             return { ...state, currentPlayingNode: action.payload }
         case CURRENT_TRACK: 
             return { ...state, currentTrack: action.payload }
+        case SET_DETOUCH_STADIA:
+            return { ...state, isDeTouch: action.payload }
         default: 
             return state;
     }
