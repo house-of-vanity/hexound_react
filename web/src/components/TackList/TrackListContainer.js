@@ -42,6 +42,7 @@ class TrackListContainer extends Component{
             <TrackList
                 trackList={this.props.trackList}
                 setCurrentTrack={this.props.setCurrentTrack}
+                isDeTouch={this.props.isDeTouch}
                 hendleGetTracks={hendleGetTracks}
             />
         )
@@ -51,6 +52,7 @@ class TrackListContainer extends Component{
 const mapStateToProps = state => {
     return {
         trackList: state.playerData.trackList,
+        isDeTouch: state.playerData.isDeTouch
     };
 };
 const mapDispatchToProps = {
