@@ -7,8 +7,16 @@ export default class Pult extends Component{
     componentDidMount(){
     }
 
+
+    handlePlayPause = () => {
+        /* TODO set load track in player */
+        const {track, play, togglePlay, currentPlayingNode } = this.props;
+        togglePlay(!play);
+    }
+
     render(){       
-        const { trackList: list, track, play, togglePlay } = this.props;
+        const { handlePlayPause } = this;
+        const { trackList: list, track, play, togglePlay, currentPlayingNode, state } = this.props;
         const currentTrackName = (track === null) ? '' : track.filename;
         return(
             <div>
@@ -17,17 +25,7 @@ export default class Pult extends Component{
                     style={{
                         cursor:'pointer'
                     }}
-                    onClick={
-                        ()=>{
-                            togglePlay(!play);
-                            (()=>{
-                                /* TODO удалить */
-                                this.props.player.load(`${baseUrl}mod/daddy_freddy-under_the_bridge.mod`, (buffer)=>{
-                                    this.props.player.play(buffer);
-                                })
-                            })()
-                        }
-                    }>{
+                    onClick={handlePlayPause}>{
                     (play)
                     ? 'pause'
                     : 'play'

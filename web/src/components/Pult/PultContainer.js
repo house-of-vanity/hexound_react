@@ -5,7 +5,7 @@ import { getTrackList, togglePlay, setCurrentTrack } from '../../store/actions';
 
 class PultContainer extends Component{
     render(){
-        const { trackList, track, play, togglePlay, player } = this.props;
+        const { trackList, track, play, togglePlay, player, currentPlayingNode, state } = this.props;
         return(
             <Pult
                 trackList={trackList}
@@ -13,6 +13,8 @@ class PultContainer extends Component{
                 play={play}
                 togglePlay={togglePlay}
                 player={player}
+                currentPlayingNode={currentPlayingNode}
+                state={state}
             />
         )
     }
@@ -23,13 +25,15 @@ const mapStateToProps = state => {
         trackList: state.playerData.trackList,
         track: state.playerData.currentTrack,
         play: state.playerData.isPlay, 
-        player: state.playerData.player
+        player: state.playerData.player,
+        currentPlayingNode: state.playerData.currentPlayingNode,
+        state:state
     };
 };
 const mapDispatchToProps = {
     getTrackList,
     togglePlay,
-    setCurrentTrack
+    setCurrentTrack,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PultContainer);
