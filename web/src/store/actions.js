@@ -1,4 +1,4 @@
-import { GET_TRACK_LIST,  TOGGLE_PLAY, CURRENT_TRACK, SET_CURRENT_PLAYER_EXAMPLE } from './defineStrings';
+import { GET_TRACK_LIST,  TOGGLE_PLAY, CURRENT_TRACK, SET_CURRENT_PLAYER_EXAMPLE, SET_CURRENT_TRACK_BUFFER } from './defineStrings';
 import { baseUrl } from '../define';
 
 export const getTrackList = (array) => ({
@@ -23,11 +23,21 @@ export const togglePlay = (bool) => {
                 });
                 break;
             default:
-                currentPlayingNode.togglePause();
+                player.togglePause();
                 break;
         }
     }
 };
+
+export const stop = () => {
+    return (dispatch, getState) => {
+        const player = getState().playerData.player;
+        dispatch({type: TOGGLE_PLAY, payload: false});
+        dispatch({ type: SET_CURRENT_PLAYER_EXAMPLE, payload: null });
+        player.stop();
+    }
+}
+
 export const setCurrentTrack = (obj) => ({
     type: CURRENT_TRACK,
     payload: obj

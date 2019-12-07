@@ -16,7 +16,7 @@ export default class Pult extends Component{
 
     render(){       
         const { handlePlayPause } = this;
-        const { trackList: list, track, play, togglePlay, currentPlayingNode, state } = this.props;
+        const { trackList: list, track, play, stop} = this.props;
         const currentTrackName = (track === null) ? '' : track.filename;
         return(
             <div>
@@ -30,6 +30,9 @@ export default class Pult extends Component{
                     ? 'pause'
                     : 'play'
                 }</span>
+                <div>
+                    <h4 onClick={stop}>STOP</h4>
+                </div>
             </div>           
         )
     }

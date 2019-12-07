@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Pult from './Pult';
-import { getTrackList, togglePlay, setCurrentTrack } from '../../store/actions'; 
+import { getTrackList, togglePlay, setCurrentTrack, stop } from '../../store/actions'; 
 
 class PultContainer extends Component{
     render(){
-        const { trackList, track, play, togglePlay, player, currentPlayingNode, state } = this.props;
+        const { trackList, track, play, togglePlay, player, currentPlayingNode, stop } = this.props;
         return(
             <Pult
                 trackList={trackList}
@@ -14,7 +14,7 @@ class PultContainer extends Component{
                 togglePlay={togglePlay}
                 player={player}
                 currentPlayingNode={currentPlayingNode}
-                state={state}
+                stop={stop}
             />
         )
     }
@@ -26,14 +26,14 @@ const mapStateToProps = state => {
         track: state.playerData.currentTrack,
         play: state.playerData.isPlay, 
         player: state.playerData.player,
-        currentPlayingNode: state.playerData.currentPlayingNode,
-        state:state
+        currentPlayingNode: state.playerData.currentPlayingNode
     };
 };
 const mapDispatchToProps = {
     getTrackList,
     togglePlay,
     setCurrentTrack,
+    stop
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PultContainer);

@@ -1,6 +1,11 @@
 
 import { combineReducers } from "redux"; 
-import { GET_TRACK_LIST,  TOGGLE_PLAY, CURRENT_TRACK, SET_CURRENT_PLAYER_EXAMPLE } from './defineStrings';
+import { 
+    GET_TRACK_LIST,  
+    TOGGLE_PLAY, CURRENT_TRACK, 
+    SET_CURRENT_PLAYER_EXAMPLE, 
+    SET_CURRENT_TRACK_BUFFER 
+} from './defineStrings';
 
 // Инициализация библионетеки для компилации музыки
 window.libopenmpt = window.Module;
@@ -18,32 +23,42 @@ const defaultState = {
     isPlay: false,
     currentTrack: null,
     player: getPlayer(),
-    currentPlayingNode: null
+    currentPlayingNode: null,
 }
 
 export const playerReduser = ( state = defaultState, action ) => {
-    console.log(action.type);
     switch( action.type ){
         case GET_TRACK_LIST:
             return { ...state, trackList: [ ...state.trackList, ...action.payload] };
-            break;
         case TOGGLE_PLAY:
             return { ...state, isPlay: action.payload }
-            break;
         case SET_CURRENT_PLAYER_EXAMPLE:
-            console.log('REDUSER');
             return { ...state, currentPlayingNode: action.payload }
-            break;
         case CURRENT_TRACK: 
             return { ...state, currentTrack: action.payload }
-            break;
         default: 
             return state;
-            break;
+    }
+}
+
+const defaultBufferState = {};
+
+export const bufferReduser = ( state = defaultBufferState, action ) => {
+    switch (action.type){
+        case SET_CURRENT_TRACK_BUFFER:
+            /* WARNING  action.payload = { name: value }*/
+            const name = action.payload.name;
+            const value = action.payload.value
+            const item = {};
+            item[name] = value
+            return { ...state, ...item };
+        default:
+            return state;
     }
 }
 
 
 export const palayerRedusers = combineReducers({
-    playerData: playerReduser
+    playerData: playerReduser,
+    buffer: bufferReduser
 });
