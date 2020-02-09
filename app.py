@@ -96,32 +96,14 @@ def chiptune2_mem():
 def send_mod(filename):
     return send_from_directory(MOD_PATH, filename)
 
-@app.route("/mods2")
-def mods2():
-    mods = None
-    # set limits and offset of query
-    limit = request.args.get('limit', default = 20, type = int)
-    offset = request.args.get('offset', default = 0, type = int)
-    mods = DB.get_mods(limit=limit, offset=offset)
-    return jsonify(mods)
-
 @app.route("/mods")
 def mods():
     mods = None
     # set limits and offset of query
     limit = request.args.get('limit', default = 20, type = int)
     offset = request.args.get('offset', default = 0, type = int)
-    # open existing mods.json database.
-    with open('mods.json') as f:
-        mods = json.load(f)
-    # ! Fix dates. Some old modules doesn't content date of upload.
-    # ! So we need to set it to default value. let it be 1522011600 unixtime
-    for mod in mods:
-        try:
-            isinstance(mod['time'], str)
-        except:
-            mod['time'] = '1522011600'
-    return jsonify(mods[offset:offset+limit])
+    mods = DB.get_mods(limit=limit, offset=offset)
+    return jsonify(mods)
 
 def main():
     CORS(app)
