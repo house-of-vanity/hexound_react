@@ -13,11 +13,15 @@ class App extends Component {
   render(){
     return (
       <Provider store={store}>
-        <div>
+        <div className={`main`}>
           <GrabnDropContainer/>
-          <h1>hexor</h1>
-          <PultContainer/>
-          <TrackListContainer/>
+          <div className={`container`}>
+            <h1 className={`main__title`}>hexound <span className={`util`}>v2</span></h1>
+          </div>  
+          <PultContainer/>      
+          <div className={`container`}>
+              <TrackListContainer/>
+          </div>
           <Credits/>
         </div>
       </Provider>

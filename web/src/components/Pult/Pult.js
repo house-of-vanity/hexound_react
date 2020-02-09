@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
-import { baseUrl } from '../../define';
+import './Pult.css';
+import Play from '../ActionBtn/Play';
+import Pause from '../ActionBtn/Pause';
+import Stop from '../ActionBtn/Stop';
+
 
 
 
@@ -30,19 +34,24 @@ export default class Pult extends Component{
 
         const currentTrackName = (track === null) ? '' : track.filename;
         return(
-            <div>
-                <h2>Pult, play: {`${play}`}, track: {currentTrackName}</h2>
-                <span 
-                    style={{
-                        cursor:'pointer'
-                    }}
-                    onClick={ handlePlayPause }>{
-                    (play)
-                    ? 'pause'
-                    : 'play'
-                }</span>
-                <div>
-                    <h4 onClick={handleStop}>STOP</h4>
+            <div className={`pult`}>
+                <div className={`pult__trackname`}>Current track: {currentTrackName}</div>
+                <div className={`pult__btnbox`}>
+                    <span 
+                        className={`pult__btn btn_toggle-play`} 
+                        onClick={ handlePlayPause }>
+                        {
+                        (play)
+                            ? <Pause width={'40px'} height={'40px'}/>
+                            : <Play width={'40px'} height={'40px'}/>
+                        }
+                    </span>
+                    <span
+                        className={`pult__btn btn_stop`}
+                        onClick={handleStop}
+                    >
+                        <Stop width={'40px'} height={'40px'}/>
+                    </span>
                 </div>
             </div>           
         )

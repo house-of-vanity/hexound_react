@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './TrackList.css';
 import { getTemplateDate } from '../../utils';
 export default class TrackList extends Component{
     handleOnClick = (obj)=> {
@@ -7,8 +8,18 @@ export default class TrackList extends Component{
             this.props.setCurrentTrack(obj);
         }
     }
-    render(){        
+    handleActiveTrack = (id) => {
+        const { currentTrack } = this.props;
+        if(currentTrack !== null){
+            return (id === currentTrack.id) ? 'active' : '';
+        } else {
+            return '';
+        }        
+    }
+    render(){  
+        const { handleActiveTrack: getActive } = this;      
         const { trackList: list, hendleGetTracks, isDeTouch } = this.props;
+
 
         let styleObj = {};
 
@@ -20,12 +31,13 @@ export default class TrackList extends Component{
         }
 
         return(
-            <div>
+            <div className={`track-list`}>
             <h2>TrackList</h2>
-                <ul style={styleObj}>
+                <ul style={styleObj} className={`track-list__list`}>
                     { 
                         list.map((item)=>(
                             <li 
+                                className={`track-list__list__item ${getActive(item.id)}`}
                                 key={item.id}
                                 onClick={()=>(this.handleOnClick(item))}
                             >
