@@ -11,19 +11,14 @@ import {
 // Инициализация библионетеки для компилации музыки
 window.libopenmpt = window.Module;
 
-const getPlayer = () => {
-    const ChiptuneJsConfig = window.ChiptuneJsConfig;
-    const ChiptuneJsPlayer = window.ChiptuneJsPlayer;
-    const player = new ChiptuneJsPlayer(new ChiptuneJsConfig(0));
-    window.__PLAYER__ = player;
-    return player;
-}
+
+
 
 const defaultState = {
     trackList: [],
     isPlay: false,
     currentTrack: null,
-    player: getPlayer(),
+    player: null,
     currentPlayingNode: null,
 }
 
