@@ -126,7 +126,7 @@ class DataBase:
             mods.append(
                 {
                     'id': mod[0],
-                    'filename': mod[1],
+                    'filename': mod[1].replace(' ', '_'),
                     'mimetype': mod[2],
                     'str_time': mod[3],
                     'author': mod[4],
