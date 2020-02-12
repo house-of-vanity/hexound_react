@@ -8,7 +8,7 @@ COPY api /hexound/api/
 WORKDIR /hexound/api
 RUN pip3 install -r requirements.txt
 WORKDIR /hexound/web
-RUN find  . -name "define.js" -print -exec sed -i -e "s/localhost/${HOSTNAME}/" {} \;
+RUN find  . -name "define.js" -print -exec sed -i -e "s/localhost:5000/${HOSTNAME}/" {} \;
 RUN npm install && npm run build
 RUN useradd -rM -s /bin/bash -u 1000 hexound
 RUN chown -R hexound /hexound
