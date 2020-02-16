@@ -11,14 +11,23 @@
     display: flex;
     align-items: center;
 }
-.pult__progress{
+.pult__progress-wrap{
     position: absolute;
-    top: 0;
+    width: 100%;
+    top:0;
     left: 0;
+    background: #00000050;
+    height: 4px;
+    transition: height 0.2s ease-out;
+}
+.pult__progress-wrap:hover{
+    height: 14px;
+}
+.pult__progress{
     display: block;
     width: 0;
-    height: 4px;
-    background: #000000;
+    height: 100%;
+    background: #000000;    
 }
 .pult__trackname{}
 .pult__btnbox{}

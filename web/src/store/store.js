@@ -111,6 +111,17 @@ if(ChiptuneJsPlayer){
         }
         return processNode;
       }
+    ChiptuneJsPlayer.prototype.setPosition = function(postion){
+      const Module = window.Module;
+      Module._openmpt_module_set_position_seconds(this.currentPlayingNode.modulePtr, postion)
+    }
+
+    ChiptuneJsPlayer.prototype.setPositionByPercent = function(percent){
+      const Module = window.Module;
+      const postion = this.duration() * percent
+      this.setPosition(postion);
+      
+    }
 }
 
 
@@ -142,13 +153,17 @@ export const store = createStore(palayerRedusers, defaultState, applyMiddleware(
 
     player.handlers.push({eventName: 'onEnded', handler: function(params) {
       store.dispatch(onEnded());
-      console.log(params)
   }})
   player.addHandler('onAudioprocess', function(e){
       const postion = window.__PLAYER__.getPosition();
-      const duration = window.__PLAYER__.duration();
-      const percent  = parseFloat(postion) / parseFloat(duration);
-      store.dispatch(setPercent(percent));
+      if(postion !== 0){
+        const duration = window.__PLAYER__.duration();
+        const percent  = parseFloat(postion) / parseFloat(duration);
+        store.dispatch(setPercent(percent));
+      } else {
+        store.dispatch(setPercent(0));
+      }
+      
   })
 
 })(store)

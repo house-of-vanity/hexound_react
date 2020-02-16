@@ -8,7 +8,12 @@ import Stop from '../ActionBtn/Stop';
 
 
 export default class Pult extends Component{
+    constructor(props){
+        super(props);
+        this.setProgress = this.setProgress.bind(this);
+    }
     componentDidMount(){
+        
     }
 
 
@@ -27,6 +32,16 @@ export default class Pult extends Component{
         } 
     }
 
+    setProgress(e){
+        const { setPositionByPercent } = this.props;
+        const element = e.currentTarget;
+        const {x, width} = element.getBoundingClientRect();
+        const { clientX } = e.nativeEvent;
+        const xWidht = clientX - x;
+        const percent = xWidht / width;
+        setPositionByPercent(percent);
+    }
+
     render(){       
         const { handlePlayPause, handleStop } = this;
         const { trackList: list, track, play, stop, percent} = this.props;
@@ -36,7 +51,12 @@ export default class Pult extends Component{
         const currentTrackName = (track === null) ? '' : track.filename;
         return(
             <div className={`pult`}>
-                <div style={{width: percentW}} className={`pult__progress`}></div>
+                <div 
+                    onClick={this.setProgress}
+                    className={`pult__progress-wrap`}
+                >
+                    <div style={{width: percentW}} className={`pult__progress`}></div>
+                </div>                
                 <div className={`pult__trackname`}>Current track: {currentTrackName}</div>
                 <div className={`pult__btnbox`}>
                     <span 
