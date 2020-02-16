@@ -140,7 +140,7 @@ class DataBase:
         Returns true if given mod found in existing database
         TODO: Check new file contents checksum in the same way
         """
-        sql = f"SELECT filename FROM mods"
+        sql = f"SELECT {filename} FROM mods"
         result = self.execute(sql)
         if filename in result:
             return True
