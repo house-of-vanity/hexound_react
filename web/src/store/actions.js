@@ -1,4 +1,12 @@
-import { GET_TRACK_LIST,  TOGGLE_PLAY, CURRENT_TRACK, SET_CURRENT_PLAYER_EXAMPLE, SET_CURRENT_TRACK_BUFFER, SET_DETOUCH_STADIA } from './defineStrings';
+import { 
+    GET_TRACK_LIST,  
+    TOGGLE_PLAY, 
+    CURRENT_TRACK, SET_CURRENT_PLAYER_EXAMPLE, 
+    SET_CURRENT_TRACK_BUFFER, 
+    SET_DETOUCH_STADIA,
+    SET_PROGRESS_PERCENT,
+    DISPATCH_EVENT_ONENDED
+} from './defineStrings';
 import {playerLoadFunctionByCurrentTrack } from './utils';
 
 export const getTrackList = (array) => ({
@@ -53,6 +61,7 @@ export const stop = () => {
         const player = getState().playerData.player;
         dispatch({type: TOGGLE_PLAY, payload: false});
         dispatch({ type: SET_CURRENT_PLAYER_EXAMPLE, payload: null });
+        dispatch(setPercent(0));
         player.stop();
     }
 }
@@ -96,3 +105,23 @@ export const setDetouchStadia = (bool) =>(
         payload: bool
     }
 );
+
+
+export const setPercent = (float) =>({
+    type: SET_PROGRESS_PERCENT,
+    payload: float
+})
+
+export const onEnded = () => {
+
+    return (dispatch, getState)=>{
+        const { currentTrack, trackList } = getState().playerData;
+        let currentTrackIndex = null;
+        trackList.map((t, i)=>{
+            if(t === currentTrack){
+                currentTrackIndex = i;
+            }
+        })
+        console.log(currentTrackIndex);
+    }
+}

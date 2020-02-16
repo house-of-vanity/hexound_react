@@ -29,12 +29,14 @@ export default class Pult extends Component{
 
     render(){       
         const { handlePlayPause, handleStop } = this;
-        const { trackList: list, track, play, stop} = this.props;
+        const { trackList: list, track, play, stop, percent} = this.props;
+        const percentW = (percent <= 1) ? `${percent * 100}%` : `100%`;
 
 
         const currentTrackName = (track === null) ? '' : track.filename;
         return(
             <div className={`pult`}>
+                <div style={{width: percentW}} className={`pult__progress`}></div>
                 <div className={`pult__trackname`}>Current track: {currentTrackName}</div>
                 <div className={`pult__btnbox`}>
                     <span 

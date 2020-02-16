@@ -5,7 +5,8 @@ import {
     TOGGLE_PLAY, CURRENT_TRACK, 
     SET_CURRENT_PLAYER_EXAMPLE, 
     SET_CURRENT_TRACK_BUFFER,
-    SET_DETOUCH_STADIA
+    SET_DETOUCH_STADIA,
+    SET_PROGRESS_PERCENT
 } from './defineStrings';
 
 // Инициализация библионетеки для компилации музыки
@@ -20,6 +21,7 @@ const defaultState = {
     currentTrack: null,
     player: null,
     currentPlayingNode: null,
+    percent: 0
 }
 
 export const playerReduser = ( state = defaultState, action ) => {
@@ -34,6 +36,8 @@ export const playerReduser = ( state = defaultState, action ) => {
             return { ...state, currentTrack: action.payload }
         case SET_DETOUCH_STADIA:
             return { ...state, isDeTouch: action.payload }
+        case SET_PROGRESS_PERCENT:
+            return { ...state, percent: action.payload }
         default: 
             return state;
     }

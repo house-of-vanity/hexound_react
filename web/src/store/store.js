@@ -1,13 +1,18 @@
 import { createStore, applyMiddleware  } from 'redux';
 import reduxThunk from 'redux-thunk';
 import { palayerRedusers } from './redusers';
+import { setPercent, onEnded } from './actions';
 
 const ChiptuneJsPlayer = (window.hasOwnProperty('ChiptuneJsPlayer')) ? window.ChiptuneJsPlayer : null;
 
 if(ChiptuneJsPlayer){
     ChiptuneJsPlayer.prototype.getPosition = function() {
         const Module = window.Module;
-        return Module._openmpt_module_get_position_seconds(this.currentPlayingNode.modulePtr);
+        if(this.currentPlayingNode && this.currentPlayingNode.hasOwnProperty('modulePtr')){
+          return Module._openmpt_module_get_position_seconds(this.currentPlayingNode.modulePtr);
+        } else {
+          return 0;
+        }        
     }
     ChiptuneJsPlayer.prototype.createLibopenmptNode = function(buffer, config) {
         // TODO error checking in this whole function
@@ -114,14 +119,6 @@ const getPlayer = () => {
     const ChiptuneJsPlayer = window.ChiptuneJsPlayer;
     const player = new ChiptuneJsPlayer(new ChiptuneJsConfig(0));
     window.__PLAYER__ = player;
-    player.handlers.push({eventName: 'onEnded', handler: function(params) {
-        console.log(params)
-    }})
-    player.addHandler('onAudioprocess', function(e){
-        const postion = window.__PLAYER__.getPosition();
-        const duration = window.__PLAYER__.duration();
-        console.log(postion, duration)
-    })
 
     return player;
 }
@@ -142,7 +139,16 @@ export const store = createStore(palayerRedusers, defaultState, applyMiddleware(
 
 (function(store){
     const player = window.__PLAYER__;
-    player.addHandler('onAudioprocess', (e)=>{
 
-    })
+    player.handlers.push({eventName: 'onEnded', handler: function(params) {
+      store.dispatch(onEnded());
+      console.log(params)
+  }})
+  player.addHandler('onAudioprocess', function(e){
+      const postion = window.__PLAYER__.getPosition();
+      const duration = window.__PLAYER__.duration();
+      const percent  = parseFloat(postion) / parseFloat(duration);
+      store.dispatch(setPercent(percent));
+  })
+
 })(store)
