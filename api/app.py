@@ -60,12 +60,12 @@ def upload_file():
                                     message="No selected file"))
         if file and allowed_file(file.filename):
             log.info(f"Going to upload {file.filename}")
-            filename = secure_filename(file.filename)
-            mod_path = os.path.join(MOD_PATH, filename)
+            filename = (secure_filename(file.filename), file.filename)
+            log.debug(filename)
+            mod_path = os.path.join(MOD_PATH, filename[0])
             file.save(mod_path)
-            metadata = Ffprobe(mod_path)
-            print(mod_path)
-            DB.add_mod(file.filename, file.mimetype)
+            #metadata = Ffprobe(mod_path)
+            DB.add_mod(filename, file.mimetype)
             return redirect(url_for('upload_file',
                                     message="File uploaded."))
         elif not allowed_file(file.filename):
