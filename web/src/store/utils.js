@@ -7,7 +7,7 @@ export const playerLoadFunctionByCurrentTrack = (currentTrack, player) => {
         }));
     } else {
         return ()=>{
-            const fileName = currentTrack.filename;
+            const fileName = currentTrack.real_name;
             const loadProimise = new Promise(function(resolve, reject) {
                 setTimeout(()=>{
                     reject();
