@@ -1,5 +1,5 @@
-MAINTAINER ultradesu@hexor.ru
 FROM ubuntu:18.04
+MAINTAINER ultradesu@hexor.ru
 
 ENV URL=dev_hexound.hexor.ru
 ENV SCHEME=https
