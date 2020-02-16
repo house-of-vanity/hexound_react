@@ -6,7 +6,10 @@ import {
     SET_CURRENT_PLAYER_EXAMPLE, 
     SET_CURRENT_TRACK_BUFFER,
     SET_DETOUCH_STADIA,
-    SET_PROGRESS_PERCENT
+    SET_PROGRESS_PERCENT,
+    SET_OFFSET,
+    SET_LIMIT,
+    SET_API_HAS_ITEM
 } from './defineStrings';
 
 // Инициализация библионетеки для компилации музыки
@@ -21,7 +24,10 @@ const defaultState = {
     currentTrack: null,
     player: null,
     currentPlayingNode: null,
-    percent: 0
+    percent: 0,
+    limit: 100,
+    offset: 0,
+    hasItems: true
 }
 
 export const playerReduser = ( state = defaultState, action ) => {
@@ -38,6 +44,12 @@ export const playerReduser = ( state = defaultState, action ) => {
             return { ...state, isDeTouch: action.payload }
         case SET_PROGRESS_PERCENT:
             return { ...state, percent: action.payload }
+        case SET_LIMIT:
+            return { ...state, limit: action.payload }
+        case SET_OFFSET:
+            return { ...state, offset: action.payload }
+        case SET_API_HAS_ITEM:
+            return { ...state, hasItems: action.payload }
         default: 
             return state;
     }

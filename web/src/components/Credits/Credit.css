@@ -5,4 +5,5 @@
     border-top: solid 1px #e8e8e8;
     box-shadow: 0px -4px 5px #00000020;
     justify-content: space-between;
+    align-items: center;
 }

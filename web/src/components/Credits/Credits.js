@@ -5,9 +5,9 @@ import Github from '../CreditsIcon/Github';
 
 export const Credits = () => (
     <div className={`credits`}>
-        <diiv>
+        <div>
             <span>Hexound v2</span>
-        </diiv>
+        </div>
         <div>
             <a style={{color:"#000000"}}
                 title={`Github создателя и автора идеи Hexound`}

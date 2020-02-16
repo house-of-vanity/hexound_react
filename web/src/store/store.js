@@ -141,6 +141,9 @@ const defaultState = {
         currentTrack: null,
         player: getPlayer(),
         currentPlayingNode: null,
+        limit: 100,
+        offset: 0,
+        hasItems: true
     }    
 }
 

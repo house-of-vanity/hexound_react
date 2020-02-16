@@ -5,14 +5,38 @@ import {
     SET_CURRENT_TRACK_BUFFER, 
     SET_DETOUCH_STADIA,
     SET_PROGRESS_PERCENT,
-    DISPATCH_EVENT_ONENDED
+    DISPATCH_EVENT_ONENDED,
+    SET_OFFSET,
+    SET_LIMIT,
+    SET_API_HAS_ITEM
 } from './defineStrings';
 import {playerLoadFunctionByCurrentTrack } from './utils';
+import { getUrlByMethodParams } from '../utils';
+import { methodGetTrackList, baseUrl } from '../define';
 
-export const getTrackList = (array) => ({
+/*export const getTrackList = (array) => ({
     type: GET_TRACK_LIST,
     payload: array
-});
+});*/
+
+
+export const getTrackList = () =>(
+    (dispatch, getState)=>{
+        const { limit, offset } = getState().playerData;
+        const url = getUrlByMethodParams(baseUrl, {limit, offset}, methodGetTrackList);
+        fetch(url).then((r)=>(r.json()), (rj)=>{console.log(rj)})
+        .then((r)=>{
+            dispatch({ type: GET_TRACK_LIST, payload: r })
+            if(r.length >=limit){
+                dispatch({ type: SET_OFFSET, payload: limit +  offset});
+            } else {
+                dispatch({ type: SET_API_HAS_ITEM, payload: false}); 
+            }
+        }, (rj)=>{console.log(rj)});
+    }
+)
+
+
 
 /* WARNING use redux-thunk */
 export const togglePlay = (bool) => {
