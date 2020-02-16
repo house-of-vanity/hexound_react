@@ -116,12 +116,24 @@ export const onEnded = () => {
 
     return (dispatch, getState)=>{
         const { currentTrack, trackList } = getState().playerData;
-        let currentTrackIndex = null;
-        trackList.map((t, i)=>{
-            if(t === currentTrack){
-                currentTrackIndex = i;
-            }
-        })
+        const currentTrackIndex = trackList.findIndex((e)=>(e === currentTrack));
+
         console.log(currentTrackIndex);
+        const newCurrentCtrack = trackList[currentTrackIndex + 1];
+        if(newCurrentCtrack){
+            dispatch(setCurrentTrack(newCurrentCtrack));
+        } else {
+            dispatch(stop());
+        }
+    }
+}
+
+
+export const setPositionByPercent = (float) => {
+    return (dispatch, getState)=>{
+        const { player, isPlay } = getState().playerData;
+        if(isPlay){
+            player.setPositionByPercent(float);
+        }
     }
 }
