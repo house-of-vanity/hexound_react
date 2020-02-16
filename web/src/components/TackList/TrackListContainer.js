@@ -9,8 +9,9 @@ class TrackListContainer extends Component{
     constructor(props){
         super(props);
         this.state = {
-            limit: 10,
+            limit: 100,
             offset: 0,
+            hasItems: true
         }
     }
     componentDidMount(){
@@ -19,9 +20,15 @@ class TrackListContainer extends Component{
         fetch(url).then((r)=>(r.json()), (rj)=>{console.log(rj)})
         .then((r)=>{
             this.props.getTrackList(r);
-            this.setState(()=>({
-                offset: params.limit + params.offset
-            }));
+            if(r.length >=params.limit){
+                this.setState(()=>({
+                    offset: params.limit + params.offset
+                }));
+            } else {
+                this.setState(()=>({
+                    hasItems: false
+                })); 
+            }
         }, (rj)=>{console.log(rj)});
     }
     hendleGetTracks = () => {
@@ -31,15 +38,24 @@ class TrackListContainer extends Component{
         fetch(url).then((r)=>(r.json()), (rj)=>{console.log(rj)})
         .then((r)=>{
             this.props.getTrackList(r);
-            this.setState(()=>({
-                offset: params.limit + params.offset
-            }));
+            if(r.length >=limit){
+                this.setState(()=>({
+                    offset: params.limit + params.offset
+                }));
+            } else {
+                this.setState(()=>({
+                    hasItems: false
+                })); 
+            }
+            
         }, (rj)=>{console.log(rj)});
     }
     render(){
         const hendleGetTracks = this.hendleGetTracks;
+        const { hasItems } = this.state;
         return(
             <TrackList
+                hasItems={hasItems}
                 trackList={this.props.trackList}
                 setCurrentTrack={this.props.setCurrentTrack}
                 isDeTouch={this.props.isDeTouch}

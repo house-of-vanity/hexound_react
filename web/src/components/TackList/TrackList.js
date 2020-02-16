@@ -18,7 +18,7 @@ export default class TrackList extends Component{
     }
     render(){  
         const { handleActiveTrack: getActive } = this;      
-        const { trackList: list, hendleGetTracks, isDeTouch } = this.props;
+        const { trackList: list, hendleGetTracks, isDeTouch, hasItems } = this.props;
 
 
         let styleObj = {};
@@ -46,7 +46,10 @@ export default class TrackList extends Component{
                         ))
                      }
                 </ul>
-                <div onClick={hendleGetTracks}>Ещё</div>
+                {
+                    hasItems && <div onClick={hendleGetTracks}>Ещё</div>
+                }
+                
             </div>
         )
     }
