@@ -21,7 +21,7 @@
     transition: height 0.2s ease-out;
 }
 .pult__progress-wrap:hover{
-    height: 14px;
+    height: 12px;
 }
 .pult__progress{
     display: block;
