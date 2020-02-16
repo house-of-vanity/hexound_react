@@ -111,10 +111,15 @@ class DataBase:
         conn.close()
 
     def add_mod(self, name, mime, author=None):
+        show_name = name[0]
+        real_name = name[1]
+        real_name = real_name.replace('_', ' ')
+        real_name = ' '.join(real_name.split('.')[0:-1])
+        print(name)
         if author:
-            sql = f"INSERT OR IGNORE INTO mods('name', 'mime', 'author') VALUES ('{name}', '{mime}', '{author}')"
+            sql = f"INSERT OR IGNORE INTO mods('name', 'real_name', 'mime', 'author') VALUES ('{show_name}', '{real_name}' '{mime}', '{author}')"
         else:
-            sql = f"INSERT OR IGNORE INTO mods('name', 'mime') VALUES ('{name}', '{mime}')"
+            sql = f"INSERT OR IGNORE INTO mods('name', 'real_name', 'mime') VALUES ('{show_name}', '{real_name}', '{mime}')"
         self.execute(sql)
         return True
 
@@ -126,11 +131,12 @@ class DataBase:
             mods.append(
                 {
                     'id': mod[0],
-                    'filename': mod[1].replace(' ', '_'),
-                    'mimetype': mod[2],
-                    'str_time': mod[3],
-                    'author': mod[4],
-                    'time': mod[5],
+                    'real_name': mod[1],
+                    'name': mod[2],
+                    'mimetype': mod[3],
+                    'str_time': mod[4],
+                    'author': mod[5],
+                    'time': mod[6],
                 }
             )
         return mods
