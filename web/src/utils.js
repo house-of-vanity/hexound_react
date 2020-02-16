@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const getUrlByMethodParams = (origin, params, methodeOptions) => {
     let paramsString = `${methodeOptions.url}`;
     let i = 0;
@@ -15,5 +17,8 @@ export const getTemplateDate = (date) =>{
     const m = (d.getMonth().toString().length === 1 ) ? `0${(d.getMonth() + 1 ).toString()}` : (d.getMonth() + 1).toString();
     const y = d.getYear(); 
     const day = (d.getDay().toString().length === 1 ) ? `0${(d.getDay() + 1).toString()}` : (d.getDay() + 1).toString();
-    return `${day}/${m}/${y}`;
+    //return `${day}/${m}/${y}`;
+    const dateP = parseInt(date);
+    console.log(dateP);
+    return moment(dateP, "s").fromNow();
 }
