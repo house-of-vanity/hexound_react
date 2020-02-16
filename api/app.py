@@ -6,6 +6,7 @@ from flask import Response, jsonify, send_from_directory, render_template, reque
 from flask import flash, redirect, url_for
 from werkzeug.utils import secure_filename
 from database import DataBase
+from ffprobe import Ffprobe
 
 HOME_DIR = os.path.dirname(os.path.realpath(__file__))
 DB = DataBase(
@@ -16,6 +17,7 @@ UPLOAD_FOLDER = os.path.join(HOME_DIR, 'storage')
 TMP_PATH = os.path.join(UPLOAD_FOLDER, 'tmp')
 MOD_PATH = os.path.join(UPLOAD_FOLDER, 'mods')
 ALLOWED_EXTENSIONS = set(['mod', 'xm', 'it', 's3m'])
+
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -59,7 +61,10 @@ def upload_file():
         if file and allowed_file(file.filename):
             log.info(f"Going to upload {file.filename}")
             filename = secure_filename(file.filename)
-            file.save(os.path.join(MOD_PATH, filename))
+            mod_path = os.path.join(MOD_PATH, filename)
+            file.save(mod_path)
+            metadata = Ffprobe(mod_path)
+            print(mod_path)
             DB.add_mod(file.filename, file.mimetype)
             return redirect(url_for('upload_file',
                                     message="File uploaded."))
