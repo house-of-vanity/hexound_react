@@ -85,7 +85,7 @@ def custom_static(filename):
 # Custom static data
 @app.route('/chiptune2.js/<path:filename>')
 def chiptune2_js(filename):
-    return send_from_directory(os.path.join(STATIC_DIR, 'chiptune2.js'), filename)
+    return send_from_directory(os.path.join(STATIC_DIR), filename)
 
 # Custom static data
 @app.route('/libopenmpt.js.mem')
