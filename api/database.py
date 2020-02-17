@@ -83,7 +83,7 @@ class DataBase:
         #log.debug("Open connection to %s", basefile)
         return sqlite3.connect(basefile, check_same_thread=False)
 
-    def execute(self, sql):
+    def execute(self, sql, params):
         """
           Execute SQL code. First of all connect to self.basefile. Close 
           connection after execution.
@@ -92,9 +92,9 @@ class DataBase:
           :return: list of response. Empty list when no rows are available.
         """
         conn = self.connect(basefile=self.basefile)
-        log.debug("Executing: %s", sql)
+        log.debug("Executing: %s %s", sql, params)
         cursor = conn.cursor()
-        cursor.execute(sql)
+        cursor.execute(sql, params)
         conn.commit()
         result = cursor.fetchall()
         self.close(conn)
@@ -110,33 +110,77 @@ class DataBase:
         #log.debug("Close connection to %s", self.basefile)
         conn.close()
 
-    def add_mod(self, name, mime, author=None):
-        show_name = name[0]
-        real_name = name[1]
-        real_name = real_name.replace('_', ' ')
-        real_name = ' '.join(real_name.split('.')[0:-1])
-        print(name)
-        if author:
-            sql = f"INSERT OR IGNORE INTO mods('name', 'real_name', 'mime', 'author') VALUES ('{show_name}', '{real_name}' '{mime}', '{author}')"
-        else:
-            sql = f"INSERT OR IGNORE INTO mods('name', 'real_name', 'mime') VALUES ('{show_name}', '{real_name}', '{mime}')"
-        self.execute(sql)
+    def add_mod(self, file_meta, author='Anonymous'):
+        secure_name =  file_meta['secure_name']
+        real_name = file_meta['real_name']
+        mime = file_meta['mime']
+        file_hash = file_meta['hash']
+        title = file_meta['title']
+        sample = file_meta['sample']
+        sql = f"""INSERT OR IGNORE INTO 
+              mods('secure_name', 'real_name', 'mime', 'hash', 
+                  'author', 'title', 'sample')
+              VALUES (?, ?, ?, ?, ?, ?, ?)"""
+        self.execute(sql, (secure_name, real_name, mime, file_hash, author, title, sample))
         return True
 
     def get_mods(self, limit, offset):
-        sql = f"SELECT rowid, *, strftime('%s', date) FROM mods LIMIT {offset},{limit}"
+        sql = f"""SELECT 
+              rowid, real_name, title, mime, 
+              strftime('%s', date) as str_time, author, date, hash, secure_name 
+              FROM mods LIMIT ?,?"""
         mods = list()
-        result = self.execute(sql)
+        result = self.execute(sql, (offset, limit))
         for mod in result:
             mods.append(
                 {
                     'id': mod[0],
                     'real_name': mod[1],
-                    'name': mod[2],
+                    'title': mod[2],
                     'mimetype': mod[3],
                     'str_time': mod[4],
                     'author': mod[5],
                     'time': mod[6],
+                    'hash': mod[7],
+                    'secure_name': mod[8],
                 }
             )
         return mods
+
+    def get_mod(self, mod_id):
+        sql = f"""SELECT 
+              rowid, real_name, secure_name, mime,
+              strftime('%s', date) as str_time, author, date, 
+              hash, title, sample 
+              FROM mods WHERE rowid = ?"""
+        result = self.execute(sql, (mod_id,))
+        if result:
+            meta = result[0]
+            mod = {
+                'id': meta[0],
+                'real_name': meta[1],
+                'secure_name': meta[2],
+                'mimetype': meta[3],
+                'time': meta[4],
+                'author': meta[5],
+                'str_time': meta[6],
+                'hash': meta[7],
+                'title': meta[8],
+                'sample': meta[9],
+            }
+        else:
+            mod = list()
+        return mod
+
+    def find_mod(self, param=None):
+        """
+          Looking for mod dublicates.
+          :param param: name or hash of module to search.
+          :type param: string
+          :return: list
+        """
+        sql = f"""SELECT rowid FROM mods WHERE real_name == ? OR
+              hash == ? ORDER BY rowid DESC LIMIT 1"""
+        result = self.execute(sql, (param, param))
+        log.debug(result)
+        return result

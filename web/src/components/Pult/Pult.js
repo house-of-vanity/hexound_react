@@ -48,7 +48,7 @@ export default class Pult extends Component{
         const percentW = (percent <= 1) ? `${percent * 100}%` : `100%`;
 
 
-        const currentTrackName = (track === null) ? '' : track.name;
+        const currentTrackName = (track === null) ? '' : track.title;
         return(
             <div className={`pult`}>
                 <div 

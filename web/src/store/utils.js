@@ -7,12 +7,12 @@ export const playerLoadFunctionByCurrentTrack = (currentTrack, player) => {
         }));
     } else {
         return ()=>{
-            const fileName = currentTrack.real_name;
+            const modId = currentTrack.id;
             const loadProimise = new Promise(function(resolve, reject) {
                 setTimeout(()=>{
                     reject();
                 }, 4000);
-                player.load(`${baseUrl}mod/${fileName}`, (buffer)=>{
+                player.load(`${baseUrl}mod/${modId}`, (buffer)=>{
                     resolve(true);
                     player.play(buffer);
                 });

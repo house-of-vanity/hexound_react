@@ -1,6 +1,7 @@
 import os
 import json
 import logging
+import hashlib
 from flask_cors import CORS
 from flask import Response, jsonify, send_from_directory, render_template, request, Flask, send_file
 from flask import flash, redirect, url_for
@@ -18,12 +19,18 @@ TMP_PATH = os.path.join(UPLOAD_FOLDER, 'tmp')
 MOD_PATH = os.path.join(UPLOAD_FOLDER, 'mods')
 ALLOWED_EXTENSIONS = set(['mod', 'xm', 'it', 's3m'])
 
-
 logging.basicConfig(
     level=logging.DEBUG,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 log = logging.getLogger('hexound_api')
 #logging.getLogger("urllib3.connectionpool").setLevel(logging.WARNING)
+
+def md5(fname):
+    hash_md5 = hashlib.md5()
+    with open(fname, "rb") as f:
+        for chunk in iter(lambda: f.read(4096), b""):
+            hash_md5.update(chunk)
+    return hash_md5.hexdigest()
 
 app = Flask(
     __name__,
@@ -60,12 +67,31 @@ def upload_file():
                                     message="No selected file"))
         if file and allowed_file(file.filename):
             log.info(f"Going to upload {file.filename}")
-            filename = (secure_filename(file.filename), file.filename)
-            log.debug(filename)
-            mod_path = os.path.join(MOD_PATH, filename[0])
-            file.save(mod_path)
-            #metadata = Ffprobe(mod_path)
-            DB.add_mod(filename, file.mimetype)
+            sec_filename = secure_filename(file.filename)
+            file.save(os.path.join(MOD_PATH, sec_filename))
+            file_meta = {
+                "secure_name": ' '.join(
+                    sec_filename.split('.')[0:-1]).capitalize().replace(
+                        '_', ' '),
+                "real_name": sec_filename,
+                "mime": file.mimetype,
+                "hash": md5(os.path.join(MOD_PATH, sec_filename))}
+            find_mod = DB.find_mod(file_meta['real_name'])
+            if find_mod:
+                appenix = str(int(find_mod[0][0]) + 1) + '_'
+                file_meta["real_name"] = appenix + file_meta["real_name"]
+            find_mod = DB.find_mod(file_meta['hash'])
+            if find_mod:
+                mod = DB.get_mod(find_mod[0][0])
+                return redirect(
+                    url_for('upload_file',
+                            message=f"File already exist. {mod}"))
+            metadata = Ffprobe(os.path.join(MOD_PATH, sec_filename)).metadata
+            file_meta['title'] = metadata['format']['tags'].get(
+                'name', file_meta['secure_name'])
+            file_meta['sample'] = metadata['format']['tags'].get(
+                'sample', None)
+            DB.add_mod(file_meta)
             return redirect(url_for('upload_file',
                                     message="File uploaded."))
         elif not allowed_file(file.filename):
@@ -80,27 +106,27 @@ def upload_file():
       <input type=file name=file>
       <input type=submit value=Upload>
     </form>
+    <h3>Curl command for bulk upload:</h3>
+    <code>find . -exec curl -X POST -F file=@"{{}}" http://localhost:5000/upload \;</code>
     '''
-# NEED TO FIX IT!
-# Custom static data
 @app.route('/static/<path:filename>')
 def custom_static(filename):
     return send_from_directory(os.path.join(STATIC_DIR, 'static'), filename)
 
-# Custom static data
-@app.route('/chiptune2.js/<path:filename>')
-def chiptune2_js(filename):
-    return send_from_directory(os.path.join(STATIC_DIR), filename)
+@app.route('/<path:filename>')
+def custom_static_root(filename):
+    return send_from_directory(STATIC_DIR, filename)
 
-# Custom static data
-@app.route('/libopenmpt.js.mem')
-def chiptune2_mem():
-    return send_from_directory(os.path.join(STATIC_DIR), 'libopenmpt.js.mem')
+@app.route('/mod/<path:mod_id>')
+def send_mod(mod_id):
+    mod_meta = DB.get_mod(mod_id)
+    return send_file(
+        os.path.join(MOD_PATH, mod_meta['real_name']), as_attachment=True)
 
-# Custom static data
-@app.route('/mod/<path:filename>')
-def send_mod(filename):
-    return send_from_directory(MOD_PATH, filename)
+@app.route('/meta/<path:mod_id>')
+def metadata(mod_id):
+    mod_meta = DB.get_mod(mod_id)
+    return jsonify(mod_meta)
 
 @app.route("/mods")
 def mods():
