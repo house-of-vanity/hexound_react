@@ -117,11 +117,21 @@ class DataBase:
         file_hash = file_meta['hash']
         title = file_meta['title']
         sample = file_meta['sample']
+        message = file_meta['message']
         sql = f"""INSERT OR IGNORE INTO 
               mods('secure_name', 'real_name', 'mime', 'hash', 
-                  'author', 'title', 'sample')
-              VALUES (?, ?, ?, ?, ?, ?, ?)"""
-        self.execute(sql, (secure_name, real_name, mime, file_hash, author, title, sample))
+                  'author', 'title', 'sample', 'message')
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?)"""
+        self.execute(sql, (
+              secure_name,
+              real_name,
+              mime,
+              file_hash,
+              author,
+              title,
+              sample,
+              message,
+              ))
         return True
 
     def get_mods(self, limit, offset):

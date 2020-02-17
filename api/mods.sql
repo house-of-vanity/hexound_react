@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS "mods" (
 	"mime"          TEXT,
 	"title"         TEXT,
 	"sample"        TEXT,
+	"message"       TEXT,
 	"date"          DATETIME DEFAULT CURRENT_TIMESTAMP,
   "author"        TEXT DEFAULT "Anonymous",
   "hash"          TEXT

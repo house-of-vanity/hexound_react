@@ -91,6 +91,8 @@ def upload_file():
                 'name', file_meta['secure_name'])
             file_meta['sample'] = metadata['format']['tags'].get(
                 'sample', None)
+            file_meta['message'] = metadata['format']['tags'].get(
+                'message', None)
             DB.add_mod(file_meta)
             return redirect(url_for('upload_file',
                                     message="File uploaded."))
