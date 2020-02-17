@@ -161,7 +161,7 @@ class DataBase:
         sql = f"""SELECT 
               rowid, real_name, secure_name, mime,
               strftime('%s', date) as str_time, author, date, 
-              hash, title, sample 
+              hash, title, sample, message 
               FROM mods WHERE rowid = ?"""
         result = self.execute(sql, (mod_id,))
         if result:
@@ -177,6 +177,7 @@ class DataBase:
                 'hash': meta[7],
                 'title': meta[8],
                 'sample': meta[9],
+                'message': meta[10],
             }
         else:
             mod = list()
