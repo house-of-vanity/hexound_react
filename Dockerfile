@@ -5,7 +5,7 @@ ENV URL=dev_hexound.hexor.ru
 ENV SCHEME=https
 ENV PORT=443
 
-RUN apk add --update python3 npm && rm -rf /var/cache/apk/*
+RUN apk add --update --no-cache python3 npm
 COPY web /hexound/web/
 COPY api /hexound/api/
 WORKDIR /hexound/api
