@@ -83,9 +83,7 @@ def upload_file():
             find_mod = DB.find_mod(file_meta['hash'])
             if find_mod:
                 mod = DB.get_mod(find_mod[0][0])
-                return redirect(
-                    url_for('upload_file',
-                            message=f"File already exist. {mod}"))
+                file_meta["real_name"] = mod["real_name"]
             metadata = Ffprobe(os.path.join(MOD_PATH, sec_filename)).metadata
             file_meta['title'] = metadata['format']['tags'].get(
                 'name', file_meta['secure_name'])
