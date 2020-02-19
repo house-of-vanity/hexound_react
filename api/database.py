@@ -118,10 +118,11 @@ class DataBase:
         title = file_meta['title']
         sample = file_meta['sample']
         message = file_meta['message']
-        sql = f"""INSERT OR IGNORE INTO 
+        metaphone = file_meta['metaphone']
+        sql = """INSERT OR IGNORE INTO 
               mods('secure_name', 'real_name', 'mime', 'hash', 
-                  'author', 'title', 'sample', 'message')
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?)"""
+                  'author', 'title', 'sample', 'message', 'metaphone')
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"""
         self.execute(sql, (
               secure_name,
               real_name,
@@ -131,11 +132,12 @@ class DataBase:
               title,
               sample,
               message,
+              metaphone,
               ))
         return True
 
     def get_mods(self, limit, offset):
-        sql = f"""SELECT 
+        sql = """SELECT 
               rowid, real_name, title, mime, 
               strftime('%s', date) as str_time, author, date, hash, secure_name 
               FROM mods LIMIT ?,?"""
@@ -158,7 +160,7 @@ class DataBase:
         return mods
 
     def get_mod(self, mod_id):
-        sql = f"""SELECT 
+        sql = """SELECT 
               rowid, real_name, secure_name, mime,
               strftime('%s', date) as str_time, author, date, 
               hash, title, sample, message 
@@ -190,8 +192,24 @@ class DataBase:
           :type param: string
           :return: list
         """
-        sql = f"""SELECT rowid FROM mods WHERE real_name == ? OR
+        sql = """SELECT rowid FROM mods WHERE real_name == ? OR
               hash == ? ORDER BY rowid DESC LIMIT 1"""
         result = self.execute(sql, (param, param))
+        return result
+
+    def search(self, query):
+        """
+          Perform module search through the base.
+        """
+        sql = """SELECT rowid, secure_name, title, mime, date, 
+              strftime('%s', date) as str_time FROM mods 
+              WHERE 
+              secure_name LIKE ? OR 
+              title LIKE ? OR
+              message LIKE ? OR
+              sample LIKE ?"""
+        query_mask = f"%{query}%"
+        result = self.execute(sql, tuple(query_mask for i in range(0, 4)))
         log.debug(result)
         return result
+

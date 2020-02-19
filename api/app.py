@@ -5,6 +5,7 @@ import hashlib
 from flask_cors import CORS
 from flask import Response, jsonify, send_from_directory, render_template, request, Flask, send_file
 from flask import flash, redirect, url_for
+from metaphone import doublemetaphone
 from werkzeug.utils import secure_filename
 from database import DataBase
 from ffprobe import Ffprobe
@@ -68,13 +69,16 @@ def upload_file():
         if file and allowed_file(file.filename):
             log.info(f"Going to upload {file.filename}")
             sec_filename = secure_filename(file.filename)
-            file.save(os.path.join(MOD_PATH, sec_filename))
-            file_meta = {
-                "secure_name": ' '.join(
+            secure_name =  ' '.join(
                     sec_filename.split('.')[0:-1]).capitalize().replace(
-                        '_', ' '),
+                        '_', ' ')
+            file.save(os.path.join(MOD_PATH, sec_filename))
+            log.debug(secure_name)
+            file_meta = {
+                "secure_name": secure_name,
                 "real_name": sec_filename,
                 "mime": file.mimetype,
+                "metaphone": doublemetaphone(secure_name)[0],
                 "hash": md5(os.path.join(MOD_PATH, sec_filename))}
             find_mod = DB.find_mod(file_meta['real_name'])
             if find_mod:
@@ -122,6 +126,11 @@ def send_mod(mod_id):
     mod_meta = DB.get_mod(mod_id)
     return send_file(
         os.path.join(MOD_PATH, mod_meta['real_name']), as_attachment=True)
+
+@app.route('/search/<path:query>')
+def search(query):
+    result = DB.search(query)
+    return jsonify(result)
 
 @app.route('/meta/<path:mod_id>')
 def metadata(mod_id):
