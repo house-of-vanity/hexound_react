@@ -16,6 +16,4 @@ class Ffprobe:
         result = subprocess.run(cmd + [path],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
-        
-        return json.loads(result.stdout)# , json.loads(result["stderr"]))
-        return result
+        return json.loads(result.stdout)

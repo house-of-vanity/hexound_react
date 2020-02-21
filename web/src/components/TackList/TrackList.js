@@ -41,7 +41,7 @@ export default class TrackList extends Component{
                                 key={item.id}
                                 onClick={()=>(this.handleOnClick(item))}
                             >
-                                {item.name} (добавлено: {getTemplateDate(item.time)})
+                                {item.title} (добавлено: {getTemplateDate(item.time)})
                             </li>
                         ))
                      }
