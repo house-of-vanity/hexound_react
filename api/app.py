@@ -115,15 +115,33 @@ def upload_file():
     <code>find . -exec curl -X POST -F file=@"{{}}" http://localhost:5000/upload \;</code>
     '''
 
-# sing up mechanics
-@app.route('/user/add', methods=['GET', 'POST'])
-def user_add():
+# sing in mechanics
+@app.route('/user/signin', methods=['GET', 'POST'])
+def signin():
+    response = {'status': False, 'message': 'An error occured. POST "user" and "pass" headers here.'}
     if request.method == 'POST':
-        username = request.form.get('user')
-        password = request.form.get('pass')
+        username = request.headers.get('user')
+        password = request.headers.get('pass')
+        if username and password:
+            log.info('Going to auth %s:%s', username, password)
+            response = DB.signin(username, password)
+            if response == []:
+                response = {'status': True, 'message': 'User created'}
+    return response
+
+# sing up mechanics
+@app.route('/user/signup', methods=['GET', 'POST'])
+def signup():
+    response = {'status': False, 'message': 'An error occured. POST "user" and "pass" headers here.'}
+    if request.method == 'POST':
+        username = request.headers.get('user')
+        password = request.headers.get('pass')
         if username and password:
             log.info('Going to register %s:%s', username, password)
-    return ''
+            response = DB.signup(username, hash_password(password))
+            if response == []:
+                response = {'status': True, 'message': 'User created'}
+    return response
 
 @app.route('/static/<path:filename>')
 def custom_static(filename):

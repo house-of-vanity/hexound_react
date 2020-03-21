@@ -11,4 +11,9 @@ CREATE TABLE IF NOT EXISTS "mods" (
   "author"        TEXT DEFAULT "Anonymous",
   "hash"          TEXT
 );
+CREATE TABLE IF NOT EXISTS "users" (
+	"name"          TEXT,
+	"password"      TEXT,
+	"date"          DATETIME DEFAULT CURRENT_TIMESTAMP
+);
 COMMIT;
