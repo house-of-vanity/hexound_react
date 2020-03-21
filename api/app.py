@@ -9,6 +9,7 @@ from metaphone import doublemetaphone
 from werkzeug.utils import secure_filename
 from database import DataBase
 from ffprobe import Ffprobe
+from tools.passwd import hash_password, verify_password, rand_hash
 
 HOME_DIR = os.path.dirname(os.path.realpath(__file__))
 DB = DataBase(
@@ -113,6 +114,17 @@ def upload_file():
     <h3>Curl command for bulk upload:</h3>
     <code>find . -exec curl -X POST -F file=@"{{}}" http://localhost:5000/upload \;</code>
     '''
+
+# sing up mechanics
+@app.route('/user/add', methods=['GET', 'POST'])
+def user_add():
+    if request.method == 'POST':
+        username = request.form.get('user')
+        password = request.form.get('pass')
+        if username and password:
+            log.info('Going to register %s:%s', username, password)
+    return ''
+
 @app.route('/static/<path:filename>')
 def custom_static(filename):
     return send_from_directory(os.path.join(STATIC_DIR, 'static'), filename)
