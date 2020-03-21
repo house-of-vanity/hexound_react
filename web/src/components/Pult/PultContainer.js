@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Pult from './Pult';
-import { getTrackList, togglePlay, setCurrentTrack, stop, setPositionByPercent } from '../../store/actions'; 
+import { 
+    getTrackList, 
+    togglePlay, 
+    setCurrentTrack, 
+    stop, 
+    setPositionByPercent,
+    onEnded
+} from '../../store/actions'; 
 
 class PultContainer extends Component{
     render(){
@@ -29,6 +36,7 @@ class PultContainer extends Component{
                 isDeTouch={isDeTouch}
                 percent={percent}
                 setPositionByPercent={setPositionByPercent}
+                onEnded={this.props.onEnded}
             />
         )
     }
@@ -50,7 +58,8 @@ const mapDispatchToProps = {
     togglePlay,
     setCurrentTrack,
     stop,
-    setPositionByPercent
+    setPositionByPercent,
+    onEnded
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PultContainer);

@@ -104,17 +104,15 @@ export const setCurrentTrack = (obj) => {
         let newCurrentCtrack = false
 
         if(obj && obj.hasOwnProperty('id')){
-
-         newCurrentCtrack = fp.pipe(
-            fp.findIndex((id) => (+id === obj.id)),
-            (index) => { 
-                return (index !== undefined && index !== null) 
-                ? getTrackObj(trackListKeys[index + 1]) : null
-            }
-        )(trackListKeys)
+            newCurrentCtrack = fp.pipe(
+                fp.findIndex((id) => (+id === obj.id)),
+                (index) => { 
+                    return (index !== undefined && index !== null) 
+                    ? getTrackObj(trackListKeys[index + 1]) : null
+                }
+            )(trackListKeys)    
         }
 
-        console.log(newCurrentCtrack)
 
         dispatch({type: CURRENT_TRACK,payload: obj});
         const state = getState(); 
@@ -132,7 +130,7 @@ export const setCurrentTrack = (obj) => {
                 dispatch({ type: SET_CURRENT_PLAYER_EXAMPLE, payload: currentPlayingNode });
             }  
             dispatch(setDetouchStadia(false));
-            (newCurrentCtrack === null) && dispatch(getTrackList(false));    
+            (newCurrentCtrack === null) && dispatch(getTrackList(false)); 
         }).catch(()=>{
             alert('setCurrentTrack Трэк не был загружен');
             dispatch({type: TOGGLE_PLAY,payload: false});

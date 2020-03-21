@@ -3,6 +3,7 @@ import './Pult.css';
 import Play from '../ActionBtn/Play';
 import Pause from '../ActionBtn/Pause';
 import Stop from '../ActionBtn/Stop';
+import ForwardStep from '../ActionBtn/ForwardStep'
 
 
 
@@ -32,6 +33,11 @@ export default class Pult extends Component{
         } 
     }
 
+    hendleSetNext = () => {
+        const { onEnded } = this.props
+        onEnded()
+    }
+
     setProgress(e){
         const { setPositionByPercent } = this.props;
         const element = e.currentTarget;
@@ -43,7 +49,7 @@ export default class Pult extends Component{
     }
 
     render(){       
-        const { handlePlayPause, handleStop } = this;
+        const { handlePlayPause, handleStop, hendleSetNext } = this;
         const { trackList: list, track, play, stop, percent} = this.props;
         const percentW = (percent <= 1) ? `${percent * 100}%` : `100%`;
 
@@ -73,6 +79,12 @@ export default class Pult extends Component{
                         onClick={handleStop}
                     >
                         <Stop width={'40px'} height={'40px'}/>
+                    </span>
+                    <span
+                        className={`pult__btn btn_stop`}
+                        onClick={hendleSetNext}
+                    >
+                        <ForwardStep width={'40px'} height={'40px'}/>
                     </span>
                 </div>
             </div>           
