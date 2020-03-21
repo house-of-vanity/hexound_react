@@ -32,6 +32,7 @@
 
 import sqlite3
 import logging
+from tools.passwd import hash_password, verify_password, rand_hash
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -213,3 +214,47 @@ class DataBase:
         log.debug(result)
         return result
 
+    def signin(self, name, password):
+        """
+          auth client
+        """
+        result = {"status": False, 'message': 'User is invalid.'}
+        sql = "SELECT name, password FROM users WHERE name = ?"
+        ret = self.execute(sql, (name,))
+        if len(ret) == 0:
+            result = {'status': False, 'message': 'User doesn\'t exist'}
+        elif len(ret) == 1:
+            stored_hash = ret[0][1]
+            print(stored_hash, password)
+            print(verify_password(stored_hash, password))
+            if verify_password(stored_hash, password):
+                result = {"status": True, 'message': 'User is valid.'}
+        return result
+
+    def signup(self, name, password):
+        """
+          add client
+        """
+        sql = "SELECT name FROM users WHERE name = ?"
+        ret = self.execute(sql, (name,))
+        if len(ret) != 0:
+            return {'status': False, 'message': 'User exist'}
+        else:
+            sql = "INSERT INTO users (name, password) VALUES (?, ?)"
+            ret = self.execute(sql, (name, password))
+        return ret
+
+    def login(self, name):
+        """
+          **Perform action with users table**
+          :param action: Requested action
+          :type action: string
+          :returns: None ?
+        """
+        sql = "SELECT pass, rowid FROM users WHERE name = '%s'" % name
+        ret = self.execute(sql)
+        if len(ret) == 0:
+            ret = False
+        else:
+            ret = ret[0]
+        return ret
