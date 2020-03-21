@@ -19,6 +19,5 @@ export const getTemplateDate = (date) =>{
     const day = (d.getDay().toString().length === 1 ) ? `0${(d.getDay() + 1).toString()}` : (d.getDay() + 1).toString();
     //return `${day}/${m}/${y}`;
     const dateP = parseInt(date);
-    console.log(dateP);
     return moment(dateP, "s").fromNow();
 }

@@ -2,23 +2,23 @@ import React, { Component } from 'react';
 import './TrackList.css';
 import { getTemplateDate } from '../../utils';
 export default class TrackList extends Component{
-    handleOnClick = (obj)=> {
-        const { isDeTouch } = this.props;
+    handleOnClick = (trackID)=> {
+        const { isDeTouch, trackList } = this.props;
         if(!isDeTouch){
-            this.props.setCurrentTrack(obj);
+            this.props.setCurrentTrack(trackList[trackID]);
         }
     }
     handleActiveTrack = (id) => {
         const { currentTrack } = this.props;
         if(currentTrack !== null){
-            return (id === currentTrack.id) ? 'active' : '';
+            return (+id === currentTrack.id) ? 'active' : '';
         } else {
             return '';
         }        
     }
     render(){  
         const { handleActiveTrack: getActive } = this;      
-        const { trackList: list, hendleGetTracks, isDeTouch, hasItems } = this.props;
+        const { trackList, playList, hendleGetTracks, isDeTouch, hasItems } = this.props;
 
 
         let styleObj = {};
@@ -35,13 +35,13 @@ export default class TrackList extends Component{
             <h2>TrackList</h2>
                 <ul style={styleObj} className={`track-list__list`}>
                     { 
-                        list.map((item)=>(
+                        playList.map((id)=>(
                             <li 
-                                className={`track-list__list__item ${getActive(item.id)}`}
-                                key={item.id}
-                                onClick={()=>(this.handleOnClick(item))}
+                                className={`track-list__list__item ${getActive(id)}`}
+                                key={id}
+                                onClick={()=>(this.handleOnClick(id))}
                             >
-                                {item.title} (добавлено: {getTemplateDate(item.time)})
+                                {trackList[id].title} (добавлено: {getTemplateDate(trackList[id].time)})
                             </li>
                         ))
                      }

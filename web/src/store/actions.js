@@ -10,6 +10,7 @@ import {
     SET_LIMIT,
     SET_API_HAS_ITEM
 } from './defineStrings';
+import fp from 'lodash/fp'
 import {playerLoadFunctionByCurrentTrack } from './utils';
 import { getUrlByMethodParams } from '../utils';
 import { methodGetTrackList, baseUrl } from '../define';
@@ -27,7 +28,7 @@ export const getTrackList = () =>(
         fetch(url).then((r)=>(r.json()), (rj)=>{console.log(rj)})
         .then((r)=>{
             dispatch({ type: GET_TRACK_LIST, payload: r })
-            if(r.length >=limit){
+            if(Object.keys(r).length >=limit){
                 dispatch({ type: SET_OFFSET, payload: limit +  offset});
             } else {
                 dispatch({ type: SET_API_HAS_ITEM, payload: false}); 
@@ -97,6 +98,24 @@ export const stop = () => {
 
 export const setCurrentTrack = (obj) => {
     return (dispatch, getState) => {
+        const { trackList } = getState().playerData;
+        const trackListKeys = Object.keys(trackList)
+        const getTrackObj = (key) => trackList.hasOwnProperty(key) ? trackList[key] : null  
+        let newCurrentCtrack = false
+
+        if(obj && obj.hasOwnProperty('id')){
+
+         newCurrentCtrack = fp.pipe(
+            fp.findIndex((id) => (+id === obj.id)),
+            (index) => { 
+                return (index !== undefined && index !== null) 
+                ? getTrackObj(trackListKeys[index + 1]) : null
+            }
+        )(trackListKeys)
+        }
+
+        console.log(newCurrentCtrack)
+
         dispatch({type: CURRENT_TRACK,payload: obj});
         const state = getState(); 
         const player = state.playerData.player;
@@ -112,7 +131,8 @@ export const setCurrentTrack = (obj) => {
                 dispatch({type: TOGGLE_PLAY,payload: true});
                 dispatch({ type: SET_CURRENT_PLAYER_EXAMPLE, payload: currentPlayingNode });
             }  
-            dispatch(setDetouchStadia(false));              
+            dispatch(setDetouchStadia(false));
+            (newCurrentCtrack === null) && dispatch(getTrackList(false));    
         }).catch(()=>{
             alert('setCurrentTrack Трэк не был загружен');
             dispatch({type: TOGGLE_PLAY,payload: false});
@@ -137,16 +157,25 @@ export const setPercent = (float) =>({
 })
 
 export const onEnded = () => {
-
     return (dispatch, getState)=>{
         const { currentTrack, trackList } = getState().playerData;
-        const currentTrackIndex = trackList.findIndex((e)=>(e === currentTrack));
-
-        console.log(currentTrackIndex);
-        const newCurrentCtrack = trackList[currentTrackIndex + 1];
+        const trackListKeys = Object.keys(trackList)
+        const getTrackObj = (key) => trackList.hasOwnProperty(key) ? trackList[key] : null      
+        
+        const newCurrentCtrack = fp.pipe(
+            fp.findIndex((id) => {
+                return (+id === currentTrack.id)
+            }),
+            (index) => { 
+                return (index !== undefined && index !== null) 
+                ? getTrackObj(trackListKeys[index + 1]) : null
+            }
+        )(trackListKeys)
+        
         if(newCurrentCtrack){
             dispatch(setCurrentTrack(newCurrentCtrack));
         } else {
+            //dispatch(getTrackList())
             dispatch(stop());
         }
     }
