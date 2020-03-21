@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { getArrTracks } from '../../store/selectors'
 import TrackList from './TrackList';
 import { getTrackList, setCurrentTrack } from '../../store/actions'; 
 import { getUrlByMethodParams } from '../../utils';
@@ -35,7 +36,7 @@ class TrackListContainer extends Component{
 
 const mapStateToProps = state => {
     return {
-        trackList: state.playerData.trackList,
+        trackList: getArrTracks(state),
         isDeTouch: state.playerData.isDeTouch,
         currentTrack: state.playerData.currentTrack,
         hasItems: state.playerData.hasItems

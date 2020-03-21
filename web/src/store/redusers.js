@@ -19,7 +19,7 @@ window.libopenmpt = window.Module;
 
 
 const defaultState = {
-    trackList: [],
+    trackList: {},
     isPlay: false,
     currentTrack: null,
     player: null,
@@ -33,7 +33,7 @@ const defaultState = {
 export const playerReduser = ( state = defaultState, action ) => {
     switch( action.type ){
         case GET_TRACK_LIST:
-            return { ...state, trackList: [ ...state.trackList, ...action.payload] };
+            return { ...state, trackList: {...state.trackList, ...action.payload} };
         case TOGGLE_PLAY:
             return { ...state, isPlay: action.payload }
         case SET_CURRENT_PLAYER_EXAMPLE:
