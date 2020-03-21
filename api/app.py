@@ -155,8 +155,11 @@ def mods():
     # set limits and offset of query
     limit = request.args.get('limit', default = 20, type = int)
     offset = request.args.get('offset', default = 0, type = int)
+    mod_dict = dict()
     mods = DB.get_mods(limit=limit, offset=offset)
-    return jsonify(mods)
+    for mod in mods:
+        mod_dict[mod['id']] = mod
+    return jsonify(mod_dict)
 
 def main():
     CORS(app)
