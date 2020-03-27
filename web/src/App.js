@@ -6,6 +6,7 @@ import TrackListContainer from './components/TackList/TrackListContainer';
 import PultContainer from './components/Pult/PultContainer';
 import GrabnDropContainer from './components/GrabnDrop/GrabnDropContainer';
 import { Credits } from './components/Credits/Credits';
+import logo from './icons/hexound_logo.png'
 
 class App extends Component {
 
@@ -14,15 +15,19 @@ class App extends Component {
     return (
       <Provider store={store}>
         <div className={`main`}>
-          <GrabnDropContainer/>
-          <div className={`container`}>
-            <h1 className={`main__title`}>hexound <span className={`util`}>v2</span></h1>
-          </div>  
-          <PultContainer/>      
-          <div className={`container`}>
-              <TrackListContainer/>
-          </div>
-          <Credits/>
+        <Credits/>
+        <div className={`container`}>
+        <div className={`main__slide`}>
+          <img src={logo} alt={`hexound`}/>
+          <p>
+            <h2>Hellow</h2>
+            <p>this is the best player for listening to chiptune</p>
+          </p>
+        </div>
+        </div>
+        
+        <TrackListContainer/>   
+        <PultContainer/>          
         </div>
       </Provider>
     );

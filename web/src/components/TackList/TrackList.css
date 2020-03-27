@@ -3,7 +3,6 @@
 .track-list__list{
     display: block;
     padding: 0;
-    border-top: solid 1px #e8e8e8;
 }
 .track-list__list__item{
     display: block;
@@ -13,9 +12,11 @@
     padding-left: 20px;
     padding-right: 20px;
     border-bottom: solid 1px #e8e8e8;
-    border-left: solid 1px #e8e8e8;
-    border-right: solid 1px #e8e8e8;
 }
 .track-list__list__item.active {
     font-weight: 700;
+}
+.track-list__container {
+    padding-left: 4px;
+    padding-right: 4px;
 }

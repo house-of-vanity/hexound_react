@@ -32,10 +32,12 @@ export default class TrackList extends Component{
 
         return(
             <div className={`track-list`}>
-            <h2>TrackList</h2>
-                <ul style={styleObj} className={`track-list__list`}>
-                    { 
-                        playList.map((id)=>(
+                <div className={`container`}>
+                    <h2>TrackList</h2>                
+                </div>
+                <div className={`track-list__container`}>
+                    <ul style={styleObj} className={`track-list__list`}>
+                        {playList.map((id)=>(
                             <li 
                                 className={`track-list__list__item ${getActive(id)}`}
                                 key={id}
@@ -43,13 +45,12 @@ export default class TrackList extends Component{
                             >
                                 {trackList[id].title} (добавлено: {getTemplateDate(trackList[id].time)})
                             </li>
-                        ))
-                     }
-                </ul>
-                {
-                    hasItems && <div onClick={hendleGetTracks}>Ещё</div>
-                }
-                
+                        ))}
+                    </ul>
+                </div>                
+                <div className={`container`}>
+                    {hasItems && <div onClick={hendleGetTracks}>Ещё</div>}
+                </div>                
             </div>
         )
     }
