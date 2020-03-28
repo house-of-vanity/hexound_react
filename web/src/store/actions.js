@@ -14,6 +14,7 @@ import fp from 'lodash/fp'
 import {playerLoadFunctionByCurrentTrack, shuffle } from './utils';
 import { getUrlByMethodParams } from '../utils';
 import { methodGetTrackList, baseUrl } from '../define';
+import * as api from './api'
 
 /*export const getTrackList = (array) => ({
     type: GET_TRACK_LIST,
@@ -208,3 +209,10 @@ export const toggleLoop = () => (
 )
 
 
+export const getSingleTrack = (trackId) => async dispatch => {
+    try {
+        const data = await api.getSingle(trackId)
+        dispatch({ type: GET_TRACK_LIST, payload: { [trackId]: data } })
+        dispatch({ type: SET_API_HAS_ITEM, payload: false}); 
+    } catch {}
+}

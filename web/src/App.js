@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './store/store';
 import './App.css';
-import TrackListContainer from './components/TackList/TrackListContainer';
-import PultContainer from './components/Pult/PultContainer';
-import GrabnDropContainer from './components/GrabnDrop/GrabnDropContainer';
 import { Credits } from './components/Credits/Credits';
 import logo from './icons/hexound_logo.png'
+import MainPage from './pages/Main'
+import Track from './pages/Track'
 
 class App extends Component {
 
@@ -19,15 +19,18 @@ class App extends Component {
         <div className={`container`}>
         <div className={`main__slide`}>
           <img src={logo} alt={`hexound`}/>
-          <p>
+          <div>
             <h2>Hellow</h2>
             <p>this is the best player for listening to chiptune</p>
-          </p>
+          </div>
         </div>
         </div>
-        
-        <TrackListContainer/>   
-        <PultContainer/>          
+        <Router>
+          <Switch>
+            <Route exact path="/" component={ (()=>(<MainPage />)) } />
+            <Route path={`/:trackID`} component={Track}/>            
+          </Switch>
+        </Router>
         </div>
       </Provider>
     );

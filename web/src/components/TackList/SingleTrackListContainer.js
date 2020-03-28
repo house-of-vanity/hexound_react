@@ -12,10 +12,9 @@ class TrackListContainer extends Component{
         super(props);
     }
     componentDidMount(){
-        const { getTrackList, getSingleTrack } = this.props
+        const { getSingleTrack } = this.props
         const { match: { params: { trackID } } } = this.props
-        console.log(trackID)
-        trackID ? getSingleTrack(trackID) : getTrackList();
+        trackID && getSingleTrack(trackID)
     }
     hendleGetTracks = () => {
         const { getTrackList } = this.props;

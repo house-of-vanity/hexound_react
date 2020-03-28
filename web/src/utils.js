@@ -13,11 +13,6 @@ export const getUrlByMethodParams = (origin, params, methodeOptions) => {
     return origin + paramsString
 }
 export const getTemplateDate = (date) =>{
-    const d = new Date(parseInt(date));
-    const m = (d.getMonth().toString().length === 1 ) ? `0${(d.getMonth() + 1 ).toString()}` : (d.getMonth() + 1).toString();
-    const y = d.getYear(); 
-    const day = (d.getDay().toString().length === 1 ) ? `0${(d.getDay() + 1).toString()}` : (d.getDay() + 1).toString();
-    //return `${day}/${m}/${y}`;
     const dateP = parseInt(date);
     return moment(dateP, "s").fromNow();
 }
