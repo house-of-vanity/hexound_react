@@ -4,9 +4,8 @@ import Play from '../ActionBtn/Play';
 import Pause from '../ActionBtn/Pause';
 import Stop from '../ActionBtn/Stop';
 import ForwardStep from '../ActionBtn/ForwardStep'
-
-
-
+import RandomIcon from '../ActionBtn/Random'
+import LoopIcon from '../ActionBtn/Loop'
 
 export default class Pult extends Component{
     constructor(props){
@@ -50,10 +49,8 @@ export default class Pult extends Component{
 
     render(){       
         const { handlePlayPause, handleStop, hendleSetNext } = this;
-        const { trackList: list, track, play, stop, percent} = this.props;
+        const { track, play, percent, toggleRandom, isRandom, toggleLoop, isLoop } = this.props;
         const percentW = (percent <= 1) ? `${percent * 100}%` : `100%`;
-
-
         const currentTrackName = (track === null) ? '' : track.title;
         return(
             <div className={`pult`}>
@@ -63,7 +60,7 @@ export default class Pult extends Component{
                 >
                     <div style={{width: percentW}} className={`pult__progress`}></div>
                 </div>                
-                <div className={`pult__trackname`}>Current track: {currentTrackName}</div>
+        <div className={`pult__trackname`}>{currentTrackName && `Current track: ${currentTrackName}`}</div>
                 <div className={`pult__btnbox`}>
                     <span 
                         className={`pult__btn btn_toggle-play`} 
@@ -71,7 +68,7 @@ export default class Pult extends Component{
                         {
                         (play)
                             ? <Pause width={'40px'} height={'40px'}/>
-                            : <Play width={'40px'} height={'40px'}/>
+                            : <Play width={'35px'} height={'35px'}/>
                         }
                     </span>
                     <span
@@ -85,6 +82,21 @@ export default class Pult extends Component{
                         onClick={hendleSetNext}
                     >
                         <ForwardStep width={'40px'} height={'40px'}/>
+                    </span>
+                    <span
+                        className={`pult__btn btn_toggle ${ (isRandom) && `active` }`}
+                        onClick={toggleRandom}
+                        style={{width: `40px`}}
+                    >
+                    <RandomIcon width={'20px'} height={'20px'}/>
+                    </span>
+
+                    <span
+                        className={`pult__btn btn_toggle  ${ (isLoop) && `active` }`}
+                        onClick={toggleLoop}
+                        style={{width: `40px`}}
+                    >
+                    <LoopIcon width={'20px'} height={'20px'}/>
                     </span>
                 </div>
             </div>           

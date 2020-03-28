@@ -37,3 +37,18 @@
 .pult__btn{} 
 .btn_toggle-play{}
 .btn_stop{}
+
+.btn_toggle {
+    display: flex;
+    flex: 0 0 40px;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    margin-left: 10px;
+    border-radius: 20px;
+    background: #22222210;
+}
+.btn_toggle.active {
+    background: #222222;
+    color: #ffffff;
+}

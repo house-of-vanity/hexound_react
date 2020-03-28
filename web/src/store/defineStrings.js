@@ -10,3 +10,5 @@ export const DISPATCH_EVENT_ONENDED = 'DISPATCH_EVENT_ONENDED';
 export const SET_OFFSET = 'SET_OFFSET';
 export const SET_LIMIT = 'SET_LIMIT';
 export const SET_API_HAS_ITEM = 'SET_API_HAS_ITEM';
+export const TOGGLE_RANDOM = 'TOGGLE_RANDOM';
+export const TOGGLE_LOOP = 'TOGGLE_LOOP'

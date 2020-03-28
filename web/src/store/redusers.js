@@ -9,7 +9,9 @@ import {
     SET_PROGRESS_PERCENT,
     SET_OFFSET,
     SET_LIMIT,
-    SET_API_HAS_ITEM
+    SET_API_HAS_ITEM,
+    TOGGLE_RANDOM,
+    TOGGLE_LOOP
 } from './defineStrings';
 
 // Инициализация библионетеки для компилации музыки
@@ -20,6 +22,8 @@ window.libopenmpt = window.Module;
 
 const defaultState = {
     trackList: {},
+    isRandom: false,
+    isLoop: false,
     isPlay: false,
     currentTrack: null,
     player: null,
@@ -50,6 +54,10 @@ export const playerReduser = ( state = defaultState, action ) => {
             return { ...state, offset: action.payload }
         case SET_API_HAS_ITEM:
             return { ...state, hasItems: action.payload }
+        case TOGGLE_RANDOM: 
+            return { ...state, isRandom: action.payload }
+        case TOGGLE_LOOP: 
+            return { ...state, isLoop: action.payload }
         default: 
             return state;
     }

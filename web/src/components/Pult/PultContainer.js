@@ -7,7 +7,9 @@ import {
     setCurrentTrack, 
     stop, 
     setPositionByPercent,
-    onEnded
+    onEnded,
+    toggleRandom,
+    toggleLoop
 } from '../../store/actions'; 
 
 class PultContainer extends Component{
@@ -22,7 +24,8 @@ class PultContainer extends Component{
             stop, 
             isDeTouch,
             percent,
-            setPositionByPercent
+            setPositionByPercent,
+            toggleRandom
         } = this.props;
         return(
             <Pult
@@ -37,6 +40,10 @@ class PultContainer extends Component{
                 percent={percent}
                 setPositionByPercent={setPositionByPercent}
                 onEnded={this.props.onEnded}
+                toggleRandom={this.props.toggleRandom}
+                isRandom={this.props.isRandom}
+                toggleLoop={this.props.toggleLoop}
+                isLoop={this.props.isLoop}
             />
         )
     }
@@ -50,7 +57,9 @@ const mapStateToProps = state => {
         player: state.playerData.player,
         currentPlayingNode: state.playerData.currentPlayingNode,
         isDeTouch: state.playerData.isDeTouch,
-        percent: state.playerData.percent
+        percent: state.playerData.percent,
+        isRandom: state.playerData.isRandom,
+        isLoop: state.playerData.isLoop
     };
 };
 const mapDispatchToProps = {
@@ -59,7 +68,9 @@ const mapDispatchToProps = {
     setCurrentTrack,
     stop,
     setPositionByPercent,
-    onEnded
+    onEnded,
+    toggleRandom,
+    toggleLoop
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PultContainer);

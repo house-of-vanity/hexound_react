@@ -2,16 +2,16 @@ import {
     GET_TRACK_LIST,  
     TOGGLE_PLAY, 
     CURRENT_TRACK, SET_CURRENT_PLAYER_EXAMPLE, 
-    SET_CURRENT_TRACK_BUFFER, 
     SET_DETOUCH_STADIA,
     SET_PROGRESS_PERCENT,
-    DISPATCH_EVENT_ONENDED,
     SET_OFFSET,
     SET_LIMIT,
-    SET_API_HAS_ITEM
+    SET_API_HAS_ITEM,
+    TOGGLE_RANDOM,
+    TOGGLE_LOOP
 } from './defineStrings';
 import fp from 'lodash/fp'
-import {playerLoadFunctionByCurrentTrack } from './utils';
+import {playerLoadFunctionByCurrentTrack, shuffle } from './utils';
 import { getUrlByMethodParams } from '../utils';
 import { methodGetTrackList, baseUrl } from '../define';
 
@@ -156,8 +156,8 @@ export const setPercent = (float) =>({
 
 export const onEnded = () => {
     return (dispatch, getState)=>{
-        const { currentTrack, trackList } = getState().playerData;
-        const trackListKeys = Object.keys(trackList)
+        const { currentTrack, trackList, isRandom, isLoop } = getState().playerData;
+        const trackListKeys = isRandom ? shuffle(Object.keys(trackList)) : Object.keys(trackList)
         const getTrackObj = (key) => trackList.hasOwnProperty(key) ? trackList[key] : null      
         
         const newCurrentCtrack = fp.pipe(
@@ -173,8 +173,12 @@ export const onEnded = () => {
         if(newCurrentCtrack){
             dispatch(setCurrentTrack(newCurrentCtrack));
         } else {
-            //dispatch(getTrackList())
-            dispatch(stop());
+            if(isLoop){
+                const zeroTrack = trackList[trackListKeys[0]]
+                dispatch(setCurrentTrack(zeroTrack));
+            } else { 
+                dispatch(stop());
+            }            
         }
     }
 }
@@ -188,3 +192,19 @@ export const setPositionByPercent = (float) => {
         }
     }
 }
+
+export const toggleRandom = () => (
+    (dispatch, getState) => {
+        const { isRandom } = getState().playerData
+        dispatch({ type: TOGGLE_RANDOM, payload: !isRandom })
+    }
+)
+
+export const toggleLoop = () => (
+    (dispatch, getState) => {
+        const { isLoop } = getState().playerData
+        dispatch({ type: TOGGLE_LOOP, payload: !isLoop })
+    }
+)
+
+
