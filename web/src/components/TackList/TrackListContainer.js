@@ -4,14 +4,11 @@ import { withRouter } from 'react-router'
 import fp from 'lodash/fp'
 import { getPlayList } from '../../store/selectors'
 import TrackList from './TrackList';
-import { getTrackList, setCurrentTrack, getSingleTrack } from '../../store/actions'; 
+import { getTrackList, setCurrentTrack, getSingleTrack } from '../../store/actions';
 
 
-class TrackListContainer extends Component{
-    constructor(props){
-        super(props);
-    }
-    componentDidMount(){
+class TrackListContainer extends Component {
+    componentDidMount() {
         const { getTrackList, getSingleTrack } = this.props
         const { match: { params: { trackID } } } = this.props
         console.log(trackID)
@@ -21,10 +18,10 @@ class TrackListContainer extends Component{
         const { getTrackList } = this.props;
         getTrackList();
     }
-    render(){
+    render() {
         const hendleGetTracks = this.hendleGetTracks;
         const { hasItems } = this.props;
-        return(
+        return (
             <TrackList
                 hasItems={hasItems}
                 playList={this.props.playList}
