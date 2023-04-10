@@ -1,0 +1,9 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8080:5000"
+  web: 
+    build: web
+    ports: 
+      - '8000:3000'

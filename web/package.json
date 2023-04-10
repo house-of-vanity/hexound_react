@@ -2,9 +2,12 @@
   "name": "hexound",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "v15.9.0"
+  },
   "dependencies": {
     "moment": "^2.24.0",
-    "node-sass": "^4.13.0",
+    "node-sass": "^7.0.0",
     "prettier": "^2.1.2",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
