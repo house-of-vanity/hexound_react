@@ -11,7 +11,7 @@ import {
 	TOGGLE_LOOP,
 } from "./defineStrings";
 import fp from "lodash/fp";
-import { playerLoadFunctionByCurrentTrack, shuffle } from "./utils";
+import { getPlayerLoadFunction, shuffle } from "./utils";
 
 import * as api from "../api";
 
@@ -39,7 +39,7 @@ export const togglePlay = (bool) => {
 		const player = state.playerData.player;
 		const currentPlayingNode = player.currentPlayingNode;
 		const currentTrack = state.playerData.currentTrack;
-		const loadFunction = playerLoadFunctionByCurrentTrack(currentTrack, player);
+		const loadFunction = getPlayerLoadFunction(currentTrack, player);
 
 		let result;
 
@@ -121,7 +121,7 @@ export const setCurrentTrack = (obj) => {
 		const player = state.playerData.player;
 		const currentTrack = obj;
 		const currentPlayingNode = player.currentPlayingNode;
-		const loadFunction = playerLoadFunctionByCurrentTrack(currentTrack, player);
+		const loadFunction = getPlayerLoadFunction(currentTrack, player);
 
 		const result = loadFunction();
 		dispatch({ type: TOGGLE_PLAY, payload: false });

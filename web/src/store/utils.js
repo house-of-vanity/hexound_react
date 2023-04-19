@@ -1,54 +1,29 @@
 import { baseUrl } from "../define";
 
-// const trackNullFunction = () =>
-// 	new Promise((resolve) => {
-// 		resolve(false);
-// 	});
+const getLoadFunction = (track, player) => () => {
+	const { id } = track;
+	const loadPromise = new Promise(function (resolve, reject) {
+		setTimeout(() => {
+			reject();
+		}, 4000);
+		player.load(`${baseUrl}mod/${id}`, (buffer) => {
+			resolve(true);
+			player.play(buffer);
+		});
+	});
+	return loadPromise;
+};
 
-// const loadTrack = (track, player) => () => {
-// 	return () => {
-// 		const modId = track.id;
-// 		const loadPromise = new Promise(function (resolve, reject) {
-// 			setTimeout(() => {
-// 				reject();
-// 			}, 4000);
-// 			player.load(`${baseUrl}mod/${modId}`, (buffer) => {
-// 				resolve(true);
-// 				player.play(buffer);
-// 			});
-// 		});
-// 		return loadPromise;
-// 	};
-// };
+const nullTrackLoad = () =>
+	new Promise(function (resolve, reject) {
+		resolve(false);
+	});
 
-// export const getLoadTrackFunction = (track, player) => {
-// 	if (track === null) {
-// 		return trackNullFunction;
-// 	} else {
-// 		return loadTrack(track, player);
-// 	}
-// };
-
-export const playerLoadFunctionByCurrentTrack = (currentTrack, player) => {
-	if (currentTrack === null) {
-		return () =>
-			new Promise(function (resolve, reject) {
-				resolve(false);
-			});
+export const getPlayerLoadFunction = (track, player) => {
+	if (track === null) {
+		return nullTrackLoad;
 	} else {
-		return () => {
-			const modId = currentTrack.id;
-			const loadPromise = new Promise(function (resolve, reject) {
-				setTimeout(() => {
-					reject();
-				}, 4000);
-				player.load(`${baseUrl}mod/${modId}`, (buffer) => {
-					resolve(true);
-					player.play(buffer);
-				});
-			});
-			return loadPromise;
-		};
+		return getLoadFunction(track, player);
 	}
 };
 
