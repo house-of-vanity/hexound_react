@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import fp from "lodash/fp";
-import { getPlayList } from "../../store/selectors";
+import { getPlayList } from "../../features/track-list/duck/selectors";
 import TrackList from "./track-list";
 import {
 	getTrackList,
