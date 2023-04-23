@@ -10,7 +10,7 @@ import {
 	onEnded,
 	toggleRandom,
 	toggleLoop,
-} from "../../store/actions";
+} from "../../features/track-list/duck/actions";
 
 class PultContainer extends Component {
 	render() {

@@ -8,7 +8,7 @@ import {
 	getTrackList,
 	setCurrentTrack,
 	getSingleTrack,
-} from "../../store/actions";
+} from "../../features/track-list/duck/actions";
 
 class TrackListContainer extends Component {
 	componentDidMount() {

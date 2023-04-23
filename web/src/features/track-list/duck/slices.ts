@@ -4,11 +4,10 @@ import { TrackDictReducers, TrackDictState } from './types'
 const initialState: TrackDictState = {
     dict: {},
     loading: false,
-    // TODO
     isRandom: false,
 	isLoop: false,
 	isPlay: false,
-	playingTrackId: null,
+	currentTrack: null,
 	player: null,
 	currentPlayingNode: null,
 	percent: 0,
@@ -34,9 +33,9 @@ export const trackDictSlice = createSlice<TrackDictState, TrackDictReducers>({
         setCurrentPlayerNode: (state, { payload }) => {
             state.currentPlayingNode = payload
         },
-        setPlayingTrackId: ( state, {payload} ) => {
-            state.playingTrackId = payload
-        },
+        setCurrentTrack: ( state, {payload} ) => {
+            state.currentTrack = payload
+        } ,
         setDetouch: (state, { payload }) => {
             state.isDeTouch = payload
         },

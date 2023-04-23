@@ -1,24 +1,14 @@
 import { createStore, applyMiddleware } from "redux";
 import reduxThunk from "redux-thunk";
 import { playerReducers } from "./redusers";
-import { setPercent, onEnded } from "./actions";
+import { onEnded } from "../features/track-list/duck/actions";
+import { trackDictSlice } from '../features/track-list/duck'
 import { player } from '../services'
 
-const defaultState = {
-	playerData: {
-		trackList: [],
-		isPlay: false,
-		currentTrack: null,
-		currentPlayingNode: null,
-		limit: 100,
-		offset: 0,
-		hasItems: true,
-	},
-};
+
 
 export const store = createStore(
 	playerReducers,
-	defaultState as any,
 	applyMiddleware(reduxThunk)
 );
 
@@ -40,9 +30,9 @@ export type AppDispatch = typeof store.dispatch
 		if (postion !== 0) {
 			const duration = window.__PLAYER__.duration();
 			const percent = parseFloat(postion) / parseFloat(duration);
-			store.dispatch(setPercent(percent));
+			store.dispatch(trackDictSlice.actions.setPercent(percent));
 		} else {
-			store.dispatch(setPercent(0));
+			store.dispatch(trackDictSlice.actions.setPercent(0));
 		}
 	});
 })(store);

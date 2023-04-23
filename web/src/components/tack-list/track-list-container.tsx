@@ -3,13 +3,13 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 // @ts-ignore
 import fp from "lodash/fp";
-import { getPlayList } from "../../store/selectors";
+import { getPlayList } from "../../features/track-list/duck/selectors";
 import TrackList from "./track-list";
 import {
 	getTrackList,
 	setCurrentTrack,
 	getSingleTrack,
-} from "../../store/actions";
+} from "../../features/track-list/duck/actions";
 import { RootState } from "../../store/store";
 
 const TrackListContainer = (props: any) => {
@@ -48,7 +48,7 @@ const TrackListContainer = (props: any) => {
 
 const mapStateToProps = (state: RootState) => {
 	return {
-		trackList: state.playerData.trackList,
+		trackList: state.playerData.dict,
 		playList: getPlayList(state),
 		isDeTouch: state.playerData.isDeTouch,
 		currentTrack: state.playerData.currentTrack,

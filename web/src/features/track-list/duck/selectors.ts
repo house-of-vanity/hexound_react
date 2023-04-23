@@ -1,6 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit";
-import { RootState } from "./store";
-import { TrackDTO } from "../api";
+import { RootState } from "../../../store/store";
+import { TrackDTO } from "../../../api";
 import { shuffle } from "./utils";
 
 const getTrackList = (state: RootState) => state.playerData.dict;

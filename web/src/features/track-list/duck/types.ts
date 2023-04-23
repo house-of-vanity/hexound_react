@@ -10,7 +10,7 @@ export interface TrackDictState {
     isRandom: boolean,
 	isLoop: boolean,
 	isPlay: boolean,
-	playingTrackId: TrackDTO['id'] | null,
+	currentTrack: TrackDTO | null,
 	player: any,
 	currentPlayingNode: PlayingNode, // TODO replace in service
 	percent: number,
@@ -25,7 +25,7 @@ export type TrackDictReducers = {
     setDict: (state: TrackDictState, action: PayloadAction<TrackDictDTO>) => void
     seIsPlay: (state: TrackDictState, action: PayloadAction<boolean>) => void 
     setCurrentPlayerNode: (state: TrackDictState, action: PayloadAction<PlayingNode>) => void 
-    setPlayingTrackId: (state: TrackDictState, action: PayloadAction<TrackDTO['id']>) => void 
+    setCurrentTrack: (state: TrackDictState, action: PayloadAction<TrackDTO>) => void 
     setDetouch: (state: TrackDictState, action: PayloadAction<boolean>)=> void
     setPercent: (state: TrackDictState, action: PayloadAction<number>) => void
     setLimit: (state: TrackDictState, action: PayloadAction<number>) => void
