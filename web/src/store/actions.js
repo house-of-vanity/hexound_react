@@ -15,11 +15,6 @@ import { getPlayerLoadFunction, shuffle } from "./utils";
 
 import * as api from "../api";
 
-/*export const getTrackList = (array) => ({
-    type: GET_TRACK_LIST,
-    payload: array
-});*/
-
 export const getTrackList = () => (dispatch, getState) => {
 	const { limit, offset } = getState().playerData;
 	api.getTrackList({ limit, offset }).then((trackList) => {
