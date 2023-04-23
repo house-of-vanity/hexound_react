@@ -13,6 +13,7 @@ import {
 	TOGGLE_RANDOM,
 	TOGGLE_LOOP,
 } from "./defineStrings";
+import { trackDictSlice } from "../features/track-list/duck";
 
 // Инициализация библионетеки для компилации музыки
 window.libopenmpt = window.Module;
@@ -79,4 +80,5 @@ export const bufferReducers = (state = defaultBufferState, action) => {
 export const playerReducers = combineReducers({
 	playerData: playerReducer,
 	buffer: bufferReducers,
+	trackDict: trackDictSlice,
 });
