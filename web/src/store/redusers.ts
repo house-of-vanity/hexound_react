@@ -4,7 +4,6 @@ import {
 	GET_TRACK_LIST,
 	TOGGLE_PLAY,
 	CURRENT_TRACK,
-	SET_CURRENT_PLAYER_EXAMPLE,
 	SET_CURRENT_TRACK_BUFFER,
 	SET_DETOUCH_STADIA,
 	SET_PROGRESS_PERCENT,
@@ -15,17 +14,17 @@ import {
 	TOGGLE_LOOP,
 } from "./defineStrings";
 import { trackDictSlice } from "../features/track-list/duck";
+import { TrackDTO, TrackDictDTO } from "../api";
 
 
 
 export interface LegacyPlayerReducer {
-	trackList: Record<any, any>
+	trackList: TrackDictDTO
 	isRandom: boolean,
 	isLoop: boolean,
 	isPlay: boolean,
-	currentTrack: any,
+	currentTrack: TrackDTO | null,
 	player: any,
-	currentPlayingNode: any,
 	percent: number,
 	limit: number,
 	offset: number,
@@ -40,7 +39,6 @@ const defaultState: LegacyPlayerReducer = {
 	isPlay: false,
 	currentTrack: null,
 	player: null,
-	currentPlayingNode: null,
 	percent: 0,
 	limit: 100,
 	offset: 0,
@@ -48,14 +46,12 @@ const defaultState: LegacyPlayerReducer = {
 	isDeTouch: false
 };
 
-export const playerReducer = (state: LegacyPlayerReducer = defaultState, action: PayloadAction<any>) => {
+export const playerReducer = (state: LegacyPlayerReducer = defaultState, action: PayloadAction<any>): LegacyPlayerReducer => {
 	switch (action.type) {
 		case GET_TRACK_LIST:
 			return { ...state, trackList: { ...state.trackList, ...action.payload } };
 		case TOGGLE_PLAY:
 			return { ...state, isPlay: action.payload };
-		case SET_CURRENT_PLAYER_EXAMPLE:
-			return { ...state, currentPlayingNode: action.payload };
 		case CURRENT_TRACK:
 			return { ...state, currentTrack: action.payload };
 		case SET_DETOUCH_STADIA:

@@ -10,14 +10,16 @@ import {
 	TOGGLE_RANDOM,
 	TOGGLE_LOOP,
 } from "./defineStrings";
-import fp from "lodash/fp";
 import { shuffle } from "./utils";
 import { player, playTrackById } from "../services";
 
 import * as api from "../api";
+import { TrackDTO } from '../api'
 import { getApiHasItems } from "../features/track-list/duck/utils";
+import { AppDispatch, RootState } from "./store";
+import { getNextTrack } from "./selectors";
 
-export const getTrackList = () => (dispatch, getState) => {
+export const getTrackList = () => (dispatch: AppDispatch, getState: ()=> RootState) => {
 	const { limit, offset } = getState().playerData;
 	api.getTrackList({ limit, offset }).then((trackList) => {
 		dispatch({ type: GET_TRACK_LIST, payload: trackList });
@@ -33,12 +35,23 @@ export const getTrackList = () => (dispatch, getState) => {
 };
 
 /* WARNING use redux-thunk */
-export const togglePlay = (bool) => {
-	return (dispatch, getState) => {
+export const togglePlay = (bool: boolean) => {
+	return (dispatch: AppDispatch, getState: ()=> RootState) => {
 		const state = getState();
 		const currentPlayingNode = player.currentPlayingNode;
 		const currentTrack = state.playerData.currentTrack;
-		const loadFunction = playTrackById(currentTrack.id);
+
+		let trackId: number
+
+		if(currentTrack){
+			trackId = currentTrack.id
+		} else {
+			// Случая когда пользователь не выбрал трек
+			const { trackList } = state.playerData
+			trackId = Number(Object.keys(trackList)[0])
+		}
+
+		const loadFunction = playTrackById(trackId);
 
 		let result;
 
@@ -82,7 +95,7 @@ export const togglePlay = (bool) => {
 };
 
 export const stop = () => {
-	return (dispatch) => {
+	return (dispatch: AppDispatch) => {
 		dispatch({ type: TOGGLE_PLAY, payload: false });
 		dispatch({ type: SET_CURRENT_PLAYER_EXAMPLE, payload: null });
 		dispatch(setPercent(0));
@@ -90,24 +103,10 @@ export const stop = () => {
 	};
 };
 
-export const setCurrentTrack = (obj) => {
-	return (dispatch, getState) => {
-		const { trackList } = getState().playerData;
-		const trackListKeys = Object.keys(trackList);
-		const getTrackObj = (key) =>
-			trackList.hasOwnProperty(key) ? trackList[key] : null;
-		let newCurrentCtrack = false;
-
-		if (obj && obj.hasOwnProperty("id")) {
-			newCurrentCtrack = fp.pipe(
-				fp.findIndex((id) => +id === obj.id),
-				(index) => {
-					return index !== undefined && index !== null
-						? getTrackObj(trackListKeys[index + 1])
-						: null;
-				}
-			)(trackListKeys);
-		}
+export const setCurrentTrack = (obj: TrackDTO) => {
+	return (dispatch: AppDispatch, getState: ()=> RootState) => {
+		const state = getState()
+		const nextTrack = getNextTrack(state)
 
 		dispatch({ type: CURRENT_TRACK, payload: obj });
 		const currentTrack = obj;
@@ -128,7 +127,8 @@ export const setCurrentTrack = (obj) => {
 					});
 				}
 				dispatch(setDetouchStadia(false));
-				newCurrentCtrack === null && dispatch(getTrackList(false));
+				// @ts-ignore
+				nextTrack === null && dispatch(getTrackList(false));
 			})
 			.catch(() => {
 				alert("setCurrentTrack Трэк не был загружен");
@@ -139,51 +139,46 @@ export const setCurrentTrack = (obj) => {
 	};
 };
 
-export const setDetouchStadia = (bool) => ({
+export const setDetouchStadia = (bool: boolean) => ({
 	type: SET_DETOUCH_STADIA,
 	payload: bool,
 });
 
-export const setPercent = (float) => ({
+export const setPercent = (float: number) => ({
 	type: SET_PROGRESS_PERCENT,
 	payload: float,
 });
 
 export const onEnded = () => {
-	return (dispatch, getState) => {
-		const { currentTrack, trackList, isRandom, isLoop } = getState().playerData;
+	return (dispatch: AppDispatch, getState: ()=> RootState) => {
+		const state = getState();
+		const {trackList, isRandom, isLoop } = state.playerData
+
+
 		const trackListKeys = isRandom
 			? shuffle(Object.keys(trackList))
 			: Object.keys(trackList);
-		const getTrackObj = (key) =>
-			trackList.hasOwnProperty(key) ? trackList[key] : null;
 
-		const newCurrentCtrack = fp.pipe(
-			fp.findIndex((id) => {
-				return +id === currentTrack.id;
-			}),
-			(index) => {
-				return index !== undefined && index !== null
-					? getTrackObj(trackListKeys[index + 1])
-					: null;
-			}
-		)(trackListKeys);
+		const nextTrack = getNextTrack(state)
 
-		if (newCurrentCtrack) {
-			dispatch(setCurrentTrack(newCurrentCtrack));
+		if (nextTrack) {
+			// @ts-ignore
+			dispatch(setCurrentTrack(nextTrack));
 		} else {
 			if (isLoop) {
 				const zeroTrack = trackList[trackListKeys[0]];
+				// @ts-ignore
 				dispatch(setCurrentTrack(zeroTrack));
 			} else {
+				// @ts-ignore
 				dispatch(stop());
 			}
 		}
 	};
 };
 
-export const setPositionByPercent = (float) => {
-	return (dispatch, getState) => {
+export const setPositionByPercent = (float: number) => {
+	return (dispatch: AppDispatch, getState: ()=> RootState) => {
 		const { isPlay } = getState().playerData;
 		if (isPlay) {
 			player.setPositionByPercent(float);
@@ -191,17 +186,17 @@ export const setPositionByPercent = (float) => {
 	};
 };
 
-export const toggleRandom = () => (dispatch, getState) => {
+export const toggleRandom = () => (dispatch: AppDispatch, getState: ()=> RootState) => {
 	const { isRandom } = getState().playerData;
 	dispatch({ type: TOGGLE_RANDOM, payload: !isRandom });
 };
 
-export const toggleLoop = () => (dispatch, getState) => {
+export const toggleLoop = () => (dispatch: AppDispatch, getState: ()=> RootState) => {
 	const { isLoop } = getState().playerData;
 	dispatch({ type: TOGGLE_LOOP, payload: !isLoop });
 };
 
-export const getSingleTrack = (trackId) => async (dispatch) => {
+export const getSingleTrack = (trackId: number) => async (dispatch: AppDispatch) => {
 	try {
 		const data = await api.getSingleTrack(trackId);
 		dispatch({ type: GET_TRACK_LIST, payload: { [trackId]: data } });
