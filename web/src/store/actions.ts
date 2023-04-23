@@ -18,21 +18,26 @@ import { TrackDTO } from '../api'
 import { getApiHasItems } from "../features/track-list/duck/utils";
 import { AppDispatch, RootState } from "./store";
 import { getNextTrack } from "./selectors";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 
-export const getTrackList = () => (dispatch: AppDispatch, getState: ()=> RootState) => {
-	const { limit, offset } = getState().playerData;
-	api.getTrackList({ limit, offset }).then((trackList) => {
-		dispatch({ type: GET_TRACK_LIST, payload: trackList });
+export const getTrackList = createAsyncThunk('player/get-tracks', async (_, thunkApi)=>{
+	const { getState, dispatch } = thunkApi
+	const { limit, offset } = (getState() as RootState).playerData
+	try {
+		const result = await api.getTrackList({limit, offset})
+		const apiHasItems = getApiHasItems(limit, result);
 
-		const apiHasItems = getApiHasItems(limit, trackList);
+		dispatch({ type: GET_TRACK_LIST, payload: result });
 
-		if (apiHasItems) {
+		if(apiHasItems){
 			dispatch({ type: SET_OFFSET, payload: limit + offset });
 		} else {
 			dispatch({ type: SET_API_HAS_ITEM, payload: false });
 		}
-	});
-};
+
+	} catch(e){} finally{}
+})
+
 
 /* WARNING use redux-thunk */
 export const togglePlay = (bool: boolean) => {
