@@ -150,3 +150,5 @@ export const getPlayer = () => {
 
   return player;
 }
+
+export const player = getPlayer()

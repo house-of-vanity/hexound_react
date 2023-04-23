@@ -11,7 +11,8 @@ import {
 	TOGGLE_LOOP,
 } from "./defineStrings";
 import fp from "lodash/fp";
-import { getPlayerLoadFunction, shuffle } from "./utils";
+import { shuffle } from "./utils";
+import { player, playTrackById } from "../services";
 
 import * as api from "../api";
 import { getApiHasItems } from "../features/track-list/duck/utils";
@@ -35,10 +36,9 @@ export const getTrackList = () => (dispatch, getState) => {
 export const togglePlay = (bool) => {
 	return (dispatch, getState) => {
 		const state = getState();
-		const player = state.playerData.player;
 		const currentPlayingNode = player.currentPlayingNode;
 		const currentTrack = state.playerData.currentTrack;
-		const loadFunction = getPlayerLoadFunction(currentTrack, player);
+		const loadFunction = playTrackById(currentTrack.id);
 
 		let result;
 
@@ -82,19 +82,13 @@ export const togglePlay = (bool) => {
 };
 
 export const stop = () => {
-	return (dispatch, getState) => {
-		const player = getState().playerData.player;
+	return (dispatch) => {
 		dispatch({ type: TOGGLE_PLAY, payload: false });
 		dispatch({ type: SET_CURRENT_PLAYER_EXAMPLE, payload: null });
 		dispatch(setPercent(0));
 		player.stop();
 	};
 };
-
-/*export const setCurrentTrack = (obj) => ({
-    type: CURRENT_TRACK,
-    payload: obj
-});*/
 
 export const setCurrentTrack = (obj) => {
 	return (dispatch, getState) => {
@@ -116,11 +110,9 @@ export const setCurrentTrack = (obj) => {
 		}
 
 		dispatch({ type: CURRENT_TRACK, payload: obj });
-		const state = getState();
-		const player = state.playerData.player;
 		const currentTrack = obj;
 		const currentPlayingNode = player.currentPlayingNode;
-		const loadFunction = getPlayerLoadFunction(currentTrack, player);
+		const loadFunction = playTrackById(currentTrack.id);
 
 		const result = loadFunction();
 		dispatch({ type: TOGGLE_PLAY, payload: false });
@@ -192,7 +184,7 @@ export const onEnded = () => {
 
 export const setPositionByPercent = (float) => {
 	return (dispatch, getState) => {
-		const { player, isPlay } = getState().playerData;
+		const { isPlay } = getState().playerData;
 		if (isPlay) {
 			player.setPositionByPercent(float);
 		}
