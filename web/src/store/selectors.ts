@@ -1,6 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 import { TrackDTO } from "../api";
+import { shuffle } from "./utils";
 
 const getTrackList = (state: RootState) => state.playerData.trackList;
 
@@ -14,9 +15,14 @@ export const getPlayList = createSelector([getTrackList], (trackList) =>
 
 export const getCurrentTrack = (state: RootState) => state.playerData.currentTrack
 
+export const getIsRandom = (state: RootState) => state.playerData.isRandom
 
-export const getNextTrack = createSelector([getArrTracks, getCurrentTrack], (tracks, currentTrack): TrackDTO | null=>{
-	const currentTrackIndex = tracks.findIndex(({id})=>id===currentTrack?.id) as number
-	const nextTrack = tracks[currentTrackIndex + 1]
+
+export const getNextTrack = createSelector([getArrTracks, getCurrentTrack, getIsRandom], (tracks, currentTrack, isRandom): TrackDTO | null=>{
+	// Учесть нужно ли рандомно переключить
+	const shuffleTracks = isRandom ? shuffle(Object.values(tracks)) : tracks
+
+	const currentTrackIndex = shuffleTracks.findIndex(({id})=>id===currentTrack?.id) as number
+	const nextTrack = shuffleTracks[currentTrackIndex + 1]
 	return nextTrack || null
 })
