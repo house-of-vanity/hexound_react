@@ -19,6 +19,9 @@ export interface IChiptune extends IAplicationChiptune {
   prototype: IChiptuneLib & Partial<IAplicationChiptune> 
 }
 
+// Инициализация библионетеки для компилации музыки
+window.libopenmpt = window.Module;
+
 const ChiptuneJsPlayer: IChiptune = (window.hasOwnProperty('ChiptuneJsPlayer')) ? window.ChiptuneJsPlayer : null;
 
 if (ChiptuneJsPlayer) {

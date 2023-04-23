@@ -10,6 +10,7 @@ import {
 	setCurrentTrack,
 	getSingleTrack,
 } from "../../store/actions";
+import { RootState } from "../../store/store";
 
 const TrackListContainer = (props: any) => {
 	const { hasItems, getTrackList } = props;
@@ -45,7 +46,7 @@ const TrackListContainer = (props: any) => {
 	);
 };
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: RootState) => {
 	return {
 		trackList: state.playerData.trackList,
 		playList: getPlayList(state),

@@ -14,12 +14,16 @@ import fp from "lodash/fp";
 import { getPlayerLoadFunction, shuffle } from "./utils";
 
 import * as api from "../api";
+import { getApiHasItems } from "../features/track-list/duck/utils";
 
 export const getTrackList = () => (dispatch, getState) => {
 	const { limit, offset } = getState().playerData;
 	api.getTrackList({ limit, offset }).then((trackList) => {
 		dispatch({ type: GET_TRACK_LIST, payload: trackList });
-		if (trackList && Object.keys(trackList).length >= limit) {
+
+		const apiHasItems = getApiHasItems(limit, trackList);
+
+		if (apiHasItems) {
 			dispatch({ type: SET_OFFSET, payload: limit + offset });
 		} else {
 			dispatch({ type: SET_API_HAS_ITEM, payload: false });

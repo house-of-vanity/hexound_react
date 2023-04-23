@@ -3,4 +3,5 @@ declare interface Window {
     ChiptuneJsPlayer: any
     ChiptuneJsConfig: any
     __PLAYER__: any
+    libopenmpt: any
   }

@@ -19,9 +19,12 @@ const defaultState = {
 
 export const store = createStore(
 	playerReducers,
-	defaultState,
+	defaultState as any,
 	applyMiddleware(reduxThunk)
 );
+
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch
 
 // Add Player handlers
 
@@ -30,11 +33,12 @@ export const store = createStore(
 
 	player.handlers.push({
 		eventName: "onEnded",
-		handler: function (params) {
+		handler: function (params: any) {
+			// @ts-ignore
 			store.dispatch(onEnded());
 		},
 	});
-	player.addHandler("onAudioprocess", function (e) {
+	player.addHandler("onAudioprocess", function (e: any) {
 		const postion = window.__PLAYER__.getPosition();
 		if (postion !== 0) {
 			const duration = window.__PLAYER__.duration();

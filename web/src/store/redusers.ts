@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import { PayloadAction } from '@reduxjs/toolkit'
 import {
 	GET_TRACK_LIST,
 	TOGGLE_PLAY,
@@ -15,10 +16,24 @@ import {
 } from "./defineStrings";
 import { trackDictSlice } from "../features/track-list/duck";
 
-// Инициализация библионетеки для компилации музыки
-window.libopenmpt = window.Module;
 
-const defaultState = {
+
+export interface LegacyPlayerReducer {
+	trackList: Record<any, any>
+	isRandom: boolean,
+	isLoop: boolean,
+	isPlay: boolean,
+	currentTrack: any,
+	player: any,
+	currentPlayingNode: any,
+	percent: number,
+	limit: number,
+	offset: number,
+	hasItems: boolean,
+	isDeTouch: boolean
+}
+
+const defaultState: LegacyPlayerReducer = {
 	trackList: {},
 	isRandom: false,
 	isLoop: false,
@@ -30,9 +45,10 @@ const defaultState = {
 	limit: 100,
 	offset: 0,
 	hasItems: true,
+	isDeTouch: false
 };
 
-export const playerReducer = (state = defaultState, action) => {
+export const playerReducer = (state: LegacyPlayerReducer = defaultState, action: PayloadAction<any>) => {
 	switch (action.type) {
 		case GET_TRACK_LIST:
 			return { ...state, trackList: { ...state.trackList, ...action.payload } };
@@ -63,7 +79,7 @@ export const playerReducer = (state = defaultState, action) => {
 
 const defaultBufferState = {};
 
-export const bufferReducers = (state = defaultBufferState, action) => {
+export const bufferReducers = (state = defaultBufferState, action: PayloadAction<any>) => {
 	switch (action.type) {
 		case SET_CURRENT_TRACK_BUFFER:
 			/* WARNING  action.payload = { name: value }*/
@@ -80,5 +96,5 @@ export const bufferReducers = (state = defaultBufferState, action) => {
 export const playerReducers = combineReducers({
 	playerData: playerReducer,
 	buffer: bufferReducers,
-	trackDict: trackDictSlice,
+	trackDict: trackDictSlice.reducer,
 });
