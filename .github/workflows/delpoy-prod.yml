@@ -20,5 +20,8 @@ jobs:
           script: |
             cd hexound_prod/
             git pull
+            echo ###########################
+            echo ${{ REACT_APP_BASE_URL }}
+            echo ###########################
             docker-compose build api-prod web-prod
             docker-compose up -d api-prod web-prod
