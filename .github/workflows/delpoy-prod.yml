@@ -18,6 +18,6 @@ jobs:
           script: |
             cd hexound_prod/
             git pull
-            echo ${{ env.REACT_APP_BASE_URL }} > web/.env
+            echo REACT_APP_BASE_URL=https://hexound.hexor.ru/api/ > web/.env
             docker-compose build api-prod web-prod
             docker-compose up -d api-prod web-prod
