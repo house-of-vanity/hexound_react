@@ -7,7 +7,6 @@ ENV PORT=443
 
 RUN apk add --update --no-cache python3 npm
 
-# COPY web /hexound/web/
 COPY api /hexound/api/
 WORKDIR /hexound/api
 RUN apk add py3-pip
