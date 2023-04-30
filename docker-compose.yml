@@ -1,0 +1,9 @@
+services:
+  api:
+    build: .
+    ports:
+      - "1489:5000"
+  web: 
+    build: web
+    ports: 
+      - '1488:3000'

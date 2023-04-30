@@ -1,9 +1,28 @@
-import { createStore, applyMiddleware } from 'redux';
-import reduxThunk from 'redux-thunk';
-import { palayerRedusers } from './redusers';
-import { setPercent, onEnded } from './actions';
+export interface IChiptuneLib {
+  currentPlayingNode: any,
+  context: any
+  duration(): number
+  modulePtr: any
+  disconnect(): void
+  cleanup(): void
+}
 
-const ChiptuneJsPlayer = (window.hasOwnProperty('ChiptuneJsPlayer')) ? window.ChiptuneJsPlayer : null;
+export interface IAplicationChiptune {
+  getPosition(): number
+  createLibopenmptNode(buffer: any, config: any): void
+  setPosition(postion: number): void
+  setPosition(postion: number): void
+  setPositionByPercent(percent: number): void
+}
+
+export interface IChiptune extends IAplicationChiptune {
+  prototype: IChiptuneLib & Partial<IAplicationChiptune> 
+}
+
+// Инициализация библионетеки для компилации музыки
+window.libopenmpt = window.Module;
+
+const ChiptuneJsPlayer: IChiptune = (window.hasOwnProperty('ChiptuneJsPlayer')) ? window.ChiptuneJsPlayer : null;
 
 if (ChiptuneJsPlayer) {
   ChiptuneJsPlayer.prototype.getPosition = function () {
@@ -56,7 +75,7 @@ if (ChiptuneJsPlayer) {
     processNode.togglePause = function () {
       this.paused = !this.paused;
     }
-    processNode.onaudioprocess = function (e) {
+    processNode.onaudioprocess = function (e: any) {
 
       processNode.player.fireEvent('onAudioprocess', e);
 
@@ -118,13 +137,12 @@ if (ChiptuneJsPlayer) {
 
   ChiptuneJsPlayer.prototype.setPositionByPercent = function (percent) {
     const postion = this.duration() * percent
-    this.setPosition(postion);
-
+    if(this.setPosition) this.setPosition(postion);
   }
 }
 
 
-const getPlayer = () => {
+export const getPlayer = () => {
   const ChiptuneJsConfig = window.ChiptuneJsConfig;
   const ChiptuneJsPlayer = window.ChiptuneJsPlayer;
   const player = new ChiptuneJsPlayer(new ChiptuneJsConfig(0));
@@ -133,41 +151,4 @@ const getPlayer = () => {
   return player;
 }
 
-const defaultState = {
-  playerData: {
-    trackList: [],
-    isPlay: false,
-    currentTrack: null,
-    player: getPlayer(),
-    currentPlayingNode: null,
-    limit: 100,
-    offset: 0,
-    hasItems: true
-  }
-}
-
-export const store = createStore(palayerRedusers, defaultState, applyMiddleware(reduxThunk));
-
-// Add Player handlers
-
-(function (store) {
-  const player = window.__PLAYER__;
-
-  player.handlers.push({
-    eventName: 'onEnded', handler: function (params) {
-      store.dispatch(onEnded());
-    }
-  })
-  player.addHandler('onAudioprocess', function (e) {
-    const postion = window.__PLAYER__.getPosition();
-    if (postion !== 0) {
-      const duration = window.__PLAYER__.duration();
-      const percent = parseFloat(postion) / parseFloat(duration);
-      store.dispatch(setPercent(percent));
-    } else {
-      store.dispatch(setPercent(0));
-    }
-
-  })
-
-})(store)
+export const player = getPlayer()

@@ -1,2 +1,6 @@
-export const baseUrl = 'http://v2.xakplant.ru:5000/';
-export const methodGetTrackList = { type: 'get', url: 'mods?', params: {limit: 'limit', offset: 'offset' } };
+export const baseUrl = process.env.REACT_APP_BASE_URL;
+export const methodGetTrackList = {
+	type: "get",
+	url: "mods?",
+	params: { limit: "limit", offset: "offset" },
+};
