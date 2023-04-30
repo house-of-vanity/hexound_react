@@ -20,6 +20,7 @@ UPLOAD_FOLDER = os.path.join(HOME_DIR, 'storage')
 TMP_PATH = os.path.join(UPLOAD_FOLDER, 'tmp')
 MOD_PATH = os.path.join(UPLOAD_FOLDER, 'mods')
 ALLOWED_EXTENSIONS = set(['mod', 'xm', 'it', 's3m'])
+API_ROOT = "/api/"
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -44,17 +45,17 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
+@app.route(f"{API_ROOT}/", defaults={'path': ''})
+@app.route(f"{API_ROOT}/<path:path>")
 def catch_all(path):
     return app.send_static_file('index.html')
 
-@app.route('/')
+@app.route(f"{API_ROOT}/")
 def root():
     return app.send_static_file('index.html')
 
 # upload mechanics
-@app.route('/upload', methods=['GET', 'POST'])
+@app.route(f"{API_ROOT}/upload", methods=['GET', 'POST'])
 def upload_file():
     message = request.args.get('message',
         default='Choose file to upload',
@@ -121,7 +122,7 @@ def upload_file():
     '''
 
 # sing in mechanics
-@app.route('/user/signin', methods=['GET', 'POST'])
+@app.route(f"{API_ROOT}/user/signin", methods=['GET', 'POST'])
 def signin():
     response = {'status': False, 'message': 'An error occured. POST "user" and "pass" headers here.'}
     if request.method == 'POST':
@@ -135,7 +136,7 @@ def signin():
     return response
 
 # sing up mechanics
-@app.route('/user/signup', methods=['GET', 'POST'])
+@app.route(f"{API_ROOT}/user/signup", methods=['GET', 'POST'])
 def signup():
     response = {'status': False, 'message': 'An error occured. POST "user" and "pass" headers here.'}
     if request.method == 'POST':
@@ -148,31 +149,31 @@ def signup():
                 response = {'status': True, 'message': 'User created'}
     return response
 
-@app.route('/static/<path:filename>')
+@app.route(f"{API_ROOT}/static/<path:filename>")
 def custom_static(filename):
     return send_from_directory(os.path.join(STATIC_DIR, 'static'), filename)
 
-@app.route('/<path:filename>')
+@app.route(f"{API_ROOT}/<path:filename>")
 def custom_static_root(filename):
     return send_from_directory(STATIC_DIR, filename)
 
-@app.route('/mod/<path:mod_id>')
+@app.route(f"{API_ROOT}/mod/<path:mod_id>")
 def send_mod(mod_id):
     mod_meta = DB.get_mod(mod_id)
     return send_file(
         os.path.join(MOD_PATH, mod_meta['real_name']), as_attachment=True)
 
-@app.route('/search/<path:query>')
+@app.route(f"{API_ROOT}/search/<path:query>")
 def search(query):
     result = DB.search(query)
     return jsonify(result)
 
-@app.route('/meta/<path:mod_id>')
+@app.route(f"{API_ROOT}/meta/<path:mod_id>")
 def metadata(mod_id):
     mod_meta = DB.get_mod(mod_id)
     return jsonify(mod_meta)
 
-@app.route("/mods")
+@app.route(f"{API_ROOT}/mods")
 def mods():
     mods = None
     # set limits and offset of query
