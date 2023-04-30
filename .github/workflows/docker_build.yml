@@ -4,13 +4,13 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - name: Kaniko build
-        uses: outillage/kaniko-action@master
-        with:
-          image: ultradesu/hexound_dev
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+#       - uses: actions/checkout@master
+#       - name: Kaniko build
+#         uses: outillage/kaniko-action@master
+#         with:
+#           image: ultradesu/hexound_dev
+#           username: ${{ secrets.DOCKERHUB_USERNAME }}
+#           password: ${{ secrets.DOCKERHUB_PASSWORD }}
       - name: Deploy over SSH
         uses: appleboy/ssh-action@v0.1.10
         with:
