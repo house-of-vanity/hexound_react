@@ -5,6 +5,8 @@ services:
       - "1490:5000"
   web-prod: 
     build: web
+    environment:
+      REACT_APP_BASE_URL: https://hexound.hexor.ru/api/
     ports: 
       - '1491:3000'
   api-dev:
@@ -13,5 +15,7 @@ services:
       - "1489:5000"
   web-dev: 
     build: web
+    environment:
+      REACT_APP_BASE_URL: https://dev-hexound.hexor.ru/api/
     ports: 
       - '1488:3000'
