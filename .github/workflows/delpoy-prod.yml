@@ -6,8 +6,6 @@ on:
 
 jobs:
   deploy:
-    env:
-        REACT_APP_BASE_URL: https://hexound.hexor.ru/api/
     runs-on: ubuntu-latest
     steps:
       - name: Deploy over SSH
@@ -20,8 +18,6 @@ jobs:
           script: |
             cd hexound_prod/
             git pull
-            echo ###########################
-            echo ${{ env.REACT_APP_BASE_URL }}
-            echo ###########################
+            echo ${{ env.REACT_APP_BASE_URL }} > web/.env
             docker-compose build api-prod web-prod
             docker-compose up -d api-prod web-prod
