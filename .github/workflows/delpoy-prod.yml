@@ -24,5 +24,5 @@ jobs:
           script: |
             cd hexound_prod/
             git pull
-            docker-compose build
-            docker-compose up -d
+            docker-compose build api-prod web-prod
+            docker-compose up -d api-prod web-prod

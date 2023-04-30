@@ -1,9 +1,17 @@
 services:
-  api:
+  api-prod:
+    build: .
+    ports:
+      - "1490:5000"
+  web-prod: 
+    build: web
+    ports: 
+      - '1491:3000'
+  api-dev:
     build: .
     ports:
       - "1489:5000"
-  web: 
+  web-dev: 
     build: web
     ports: 
       - '1488:3000'
