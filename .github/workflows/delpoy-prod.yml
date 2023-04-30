@@ -1,0 +1,28 @@
+name: Prod deploy
+on:
+  push:
+    branches:
+      - master
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+#       - uses: actions/checkout@master
+#       - name: Kaniko build
+#         uses: outillage/kaniko-action@master
+#         with:
+#           image: ultradesu/hexound_dev
+#           username: ${{ secrets.DOCKERHUB_USERNAME }}
+#           password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: 22
+          script: |
+            cd hexound_prod/
+            git pull
+            docker-compose build api-prod web-prod
+            docker-compose up -d api-prod web-prod
