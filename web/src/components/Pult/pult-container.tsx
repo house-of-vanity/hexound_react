@@ -9,7 +9,6 @@ const mapStateToProps = (state: RootState) => ({
 	track: state.playerData.currentTrack,
 	play: state.playerData.isPlay,
 	isDeTouch: state.playerData.isDeTouch,
-	percent: state.playerData.percent,
 	isRandom: state.playerData.isRandom,
 	isLoop: state.playerData.isLoop,
 });
@@ -17,13 +16,12 @@ const mapStateToProps = (state: RootState) => ({
 export type PultContainerProps = ReturnType<typeof mapStateToProps>;
 
 const PultContainer = (props: PultContainerProps) => {
-	const { track, play, isDeTouch, percent, isLoop, isRandom } = props;
+	const { track, play, isDeTouch, isLoop, isRandom } = props;
 	const {
 		onEnded,
 		onToggleLoop,
 		onPlay,
 		onStop,
-		onSetPositionPercent,
 		onToggleRandom,
 	} = usePultActions();
 
@@ -34,8 +32,6 @@ const PultContainer = (props: PultContainerProps) => {
 			onPlay={onPlay}
 			onStop={onStop}
 			isDeTouch={isDeTouch}
-			percent={percent}
-			onSetPositionPercent={onSetPositionPercent}
 			onEnded={onEnded}
 			onToggleRandom={onToggleRandom}
 			isRandom={isRandom}

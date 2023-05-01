@@ -6,6 +6,10 @@ export const useProgress = () => {
     const [progress, setProgress] = useState<number>(0)
 
     useEffect(()=>{
+        player.addHandler('onStop', function(){
+            setProgress(0)
+        })
+
         player.addHandler("onAudioprocess", function (e: any) {
 		const postion = window.__PLAYER__.getPosition();
 		if (postion !== 0) {

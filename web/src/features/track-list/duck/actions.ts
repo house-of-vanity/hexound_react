@@ -88,8 +88,6 @@ export const togglePlay = (bool: boolean) => {
 export const stop = () => {
 	return (dispatch: AppDispatch) => {
 		dispatch(actions.seIsPlay(false))
-		dispatch(actions.setPercent(0));
-		player.stop();
 	};
 };
 
@@ -157,14 +155,7 @@ export const onEnded = () => {
 	};
 };
 
-export const setPositionByPercent = (float: number) => {
-	return (dispatch: AppDispatch, getState: ()=> RootState) => {
-		const { isPlay } = getState().playerData;
-		if (isPlay) {
-			player.setPositionByPercent(float);
-		}
-	};
-};
+
 
 export const toggleRandom = () => (dispatch: AppDispatch, getState: ()=> RootState) => {
 	const { isRandom } = getState().playerData;

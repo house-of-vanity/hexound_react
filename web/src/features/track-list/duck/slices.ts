@@ -10,7 +10,6 @@ const initialState: TrackDictState = {
 	currentTrack: null,
 	player: null,
 	currentPlayingNode: null,
-	percent: 0,
 	limit: 100,
 	offset: 0,
 	hasItems: true,
@@ -38,9 +37,6 @@ export const trackDictSlice = createSlice<TrackDictState, TrackDictReducers>({
         } ,
         setDetouch: (state, { payload }) => {
             state.isDeTouch = payload
-        },
-        setPercent: (state, { payload }) => {
-            state.percent = payload
         },
         setLimit:  (state, { payload }) => {
             state.limit = payload

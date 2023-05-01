@@ -10,6 +10,7 @@ import { PultActions } from "./use-pult-actions";
 import { TrackDTO } from "../../api";
 import { onEnded } from "../../features/track-list/duck/actions";
 import { useProgress } from "./use-progress";
+import { player } from "../../services/chiptune";
 
 export interface PultProps extends PultActions {
 	play: boolean;
@@ -17,7 +18,6 @@ export interface PultProps extends PultActions {
 	track: TrackDTO;
 	isLoop: boolean;
 	isRandom: boolean;
-	percent: number;
 }
 
 export const Pult = (props: PultProps) => {
@@ -29,7 +29,6 @@ export const Pult = (props: PultProps) => {
 		onToggleLoop,
 		onToggleRandom,
 		isLoop,
-		onSetPositionPercent,
 		isDeTouch,
 		onPlay,
 		onStop,
@@ -50,6 +49,7 @@ export const Pult = (props: PultProps) => {
 	const handleStop = () => {
 		if (!isDeTouch) {
 			onStop();
+			player.stop();
 		}
 	};
 
@@ -59,7 +59,7 @@ export const Pult = (props: PultProps) => {
 		const { clientX } = e.nativeEvent;
 		const xWidht = clientX - x;
 		const percent = xWidht / width;
-		onSetPositionPercent(percent);
+		player.setPositionByPercent(percent);
 	};
 
 	return (

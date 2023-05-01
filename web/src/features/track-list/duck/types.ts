@@ -13,7 +13,6 @@ export interface TrackDictState {
 	currentTrack: TrackDTO | null,
 	player: any,
 	currentPlayingNode: PlayingNode, // TODO replace in service
-	percent: number,
 	limit: number,
 	offset: number,
 	hasItems: boolean,
@@ -27,26 +26,11 @@ export type TrackDictReducers = {
     setCurrentPlayerNode: (state: TrackDictState, action: PayloadAction<PlayingNode>) => void 
     setCurrentTrack: (state: TrackDictState, action: PayloadAction<TrackDTO>) => void 
     setDetouch: (state: TrackDictState, action: PayloadAction<boolean>)=> void
-    setPercent: (state: TrackDictState, action: PayloadAction<number>) => void
     setLimit: (state: TrackDictState, action: PayloadAction<number>) => void
     setOffset: (state: TrackDictState, action: PayloadAction<number>) => void
     setApiHasItems:  (state: TrackDictState, action: PayloadAction<boolean>) => void
     setRandom: (state: TrackDictState, action: PayloadAction<boolean>) => void
     setIsLoop: (state: TrackDictState, action: PayloadAction<boolean>) => void
 }
-
-
-// GET_TRACK_LIST -> fetchTrackDict
-// TOGGLE_PLAY -> seIsPlay
-// SET_CURRENT_PLAYER_EXAMPLE -> setCurrentPlayerNode
-// CURRENT_TRACK ( currentTrack -> playingTrackId ) -> setPlayingTrackId
-// SET_DETOUCH_STADIA -> setDetouch
-// SET_PROGRESS_PERCENT -> setPercent
-// SET_LIMIT -> setLimit
-// SET_OFFSET -> setOffset
-// SET_API_HAS_ITEM -> setApiHasItems
-// TOGGLE_RANDOM -> setRandom
-// TOGGLE_LOOP -> setIsLoop 
-
 
 
