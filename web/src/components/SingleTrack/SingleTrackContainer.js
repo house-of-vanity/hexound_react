@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router";
 import SingleTrackListContainer from "../tack-list/SingleTrackListContainer";
-import PultContainer from "../Pult/PultContainer";
+import PultContainer from "../player-control-panel/hocs/track-list-panel-container";
 
 class SingleTrackContainer extends Component {
 	backOnMainPage = () => {

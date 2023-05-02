@@ -50,7 +50,6 @@ const mapStateToProps = (state: RootState) => {
 	return {
 		trackList: state.playerData.dict,
 		playList: getPlayList(state),
-		isDeTouch: state.playerData.isDeTouch,
 		currentTrack: state.playerData.currentTrack,
 		hasItems: state.playerData.hasItems,
 	};
