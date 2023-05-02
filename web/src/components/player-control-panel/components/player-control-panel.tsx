@@ -30,16 +30,19 @@ export const PlayerControlPanel = (props: PlayerControlPanelProps) => {
 	const onToggleRandom = () => setRandom((p) => !p);
 	const onToggleLoop = () => setLoop((p) => !p);
 
-	const handlePlay = useCallback(() => {
-		if (track) {
-			const loadFunction = playTrackById(track.id);
-			loadFunction().then();
-		}
-	}, [track]);
+	const handlePlay = useCallback((track: TrackDTO) => {
+		const loadFunction = playTrackById(track.id);
+		loadFunction().then();
+	}, []);
 
 	useEffect(() => {
-		handlePlay();
-	}, [handlePlay]);
+		if (track) {
+			handlePlay(track);
+		}
+		return () => {
+			player.stop();
+		};
+	}, [handlePlay, track]);
 
 	const percent = useProgress();
 	const percentW = percent <= 1 ? `${percent * 100}%` : `100%`;
@@ -65,7 +68,7 @@ export const PlayerControlPanel = (props: PlayerControlPanelProps) => {
 				player.currentPlayingNode.unpause();
 			}
 		} else {
-			handlePlay();
+			track && handlePlay(track);
 		}
 	};
 

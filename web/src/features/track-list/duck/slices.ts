@@ -33,5 +33,6 @@ export const trackDictSlice = createSlice<TrackDictState, TrackDictReducers>({
 		setApiHasItems: (state, { payload }) => {
 			state.hasItems = payload;
 		},
+		reset: () => initialState,
 	},
 });
