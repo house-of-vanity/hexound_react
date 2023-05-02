@@ -59,8 +59,9 @@ const TrackList = (props: TrackListProps) => {
 
 			<div className={`track-list__container`}>
 				<ul style={styleObj} className={`track-list__list`}>
-					{playList.map((id: any) => (
+					{playList.map((id: any, i) => (
 						<TrackItem
+							first={i === 0}
 							key={id}
 							onClick={handleOnClick}
 							track={trackList[id]}

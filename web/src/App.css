@@ -14,3 +14,7 @@
     --text-secondary: #6c757d;
     --border-primary: solid 1px #e8e8e8;
 }
+
+* {
+    outline-color: #ff5079;
+}

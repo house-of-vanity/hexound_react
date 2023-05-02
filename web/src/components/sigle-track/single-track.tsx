@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { PlayerControlPanel } from "../player-control-panel";
 import { TrackDTO, getSingleTrack } from "../../api";
-import { ButtonPseudo } from "./buttons/pseudo";
+import { ButtonPseudo } from "../../common/components/button";
 
 export const SingleTrack = () => {
 	const { trackID } = useParams<{ trackID: string }>();
