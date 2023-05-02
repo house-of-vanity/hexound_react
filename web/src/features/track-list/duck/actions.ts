@@ -1,9 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { getApiHasItems } from "./utils";
-import { player, playTrackById } from "../../../services";
 
 import * as api from "../../../api";
-import { TrackDTO } from "../../../api";
+import { TrackDictDTO, TrackDTO } from "../../../api";
 import { AppDispatch, RootState } from "../../../store/store";
 import { getNextTrack } from "./selectors";
 import { trackDictSlice } from "./slices";
@@ -28,52 +27,11 @@ export const getTrackList = createAsyncThunk(
 				dispatch(actions.setApiHasItems(false));
 			}
 		} catch (e) {
+			console.log(e);
 		} finally {
 		}
 	}
 );
-
-/* WARNING use redux-thunk */
-export const togglePlay = (bool: boolean) => {
-	return (dispatch: AppDispatch, getState: () => RootState) => {
-		const state = getState();
-		const currentPlayingNode = player.currentPlayingNode;
-		const currentTrack = state.playerData.currentTrack;
-
-		let trackId: number;
-
-		if (currentTrack) {
-			trackId = currentTrack.id;
-		} else {
-			// Случая когда пользователь не выбрал трек
-			const { dict } = state.playerData;
-			trackId = Number(Object.keys(dict)[0]);
-		}
-
-		const loadFunction = playTrackById(trackId);
-
-		let result;
-
-		switch (currentPlayingNode) {
-			case null:
-				result = loadFunction();
-				break;
-			default:
-				result = true;
-				player.togglePause();
-				break;
-		}
-		if (typeof result === "boolean") {
-		}
-		if (result instanceof Promise) {
-			result
-				.then((resolve) => {})
-				.catch(() => {
-					alert("togglePlay Трэк не был загружен");
-				});
-		}
-	};
-};
 
 export const setCurrentTrack = (currentTrack: TrackDTO) => {
 	return (dispatch: AppDispatch) => {
@@ -96,6 +54,28 @@ export const setNextTrack = (params: OnGetNextParams) => async (
 	getState: () => RootState
 ) => {
 	const state = getState();
+	const { offset, limit, hasItems, dict } = state.playerData;
 	const nextTrack = getNextTrack(state, params);
-	dispatch(actions.setCurrentTrack(nextTrack as TrackDTO));
+	if (nextTrack) {
+		dispatch(actions.setCurrentTrack(nextTrack));
+	} else {
+		// Если есть элементы для загрузки
+		if (hasItems) {
+			const result: TrackDictDTO = await api.getTrackList({ limit, offset });
+			const apiHasItems = getApiHasItems(limit, result);
+
+			dispatch(actions.setDict({ ...dict, ...result }));
+
+			if (apiHasItems) {
+				dispatch(actions.setOffset(limit + offset));
+			} else {
+				dispatch(actions.setApiHasItems(false));
+			}
+
+			dispatch(actions.setCurrentTrack(Object.values(result)[0]));
+		} else if (params.isLoop) {
+			// Если бесконечный цикл
+			dispatch(actions.setCurrentTrack(Object.values(dict)[0]));
+		}
+	}
 };
