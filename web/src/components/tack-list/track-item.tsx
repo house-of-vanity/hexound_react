@@ -1,8 +1,10 @@
 import React, { useCallback } from "react";
 import { useHistory } from "react-router";
 import { TrackDTO } from "../../api";
-import { getTemplateDate } from "../../utils";
 import { LinkIcon } from "../../icons/components";
+import { toUpperFirst } from "../../utils/to-upper-first";
+import styles from "./track-list.module.scss";
+import clsx from "clsx";
 
 export interface TrackItemProps {
 	track: TrackDTO;
@@ -12,7 +14,7 @@ export interface TrackItemProps {
 
 export const TrackItem = (props: TrackItemProps) => {
 	const { track, getActive, onClick } = props;
-	const { id, title, time } = track;
+	const { id, title } = track;
 
 	const history = useHistory();
 
@@ -22,14 +24,17 @@ export const TrackItem = (props: TrackItemProps) => {
 
 	return (
 		<li
-			className={`track-list__list__item ${getActive(id)}`}
+			className={clsx(styles.track, { [styles.trackActive]: getActive(id) })}
 			key={id}
 			onClick={() => onClick(id)}
 		>
-			{title} (добавлено: {getTemplateDate(time)}){" "}
-			<span onClick={goTrack}>
+			<span />
+			{toUpperFirst(title)}
+			<span className={styles.linkBox} onClick={goTrack}>
 				<LinkIcon className="link-icon" />
 			</span>
 		</li>
 	);
 };
+
+// `track-list__list__item ${getActive(id)}`

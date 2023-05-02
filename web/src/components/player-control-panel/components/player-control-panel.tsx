@@ -11,6 +11,8 @@ import "./player.css";
 import { useProgress } from "../hooks/use-progress";
 import { usePlaying } from "../hooks/use-playing";
 import { player } from "../../../services";
+import { toUpperFirst } from "../../../utils/to-upper-first";
+import styles from "./control-panel.module.scss";
 
 export interface GetNextTrackParams {
 	isRandom: boolean;
@@ -102,7 +104,12 @@ export const PlayerControlPanel = (props: PlayerControlPanelProps) => {
 				<div style={{ width: percentW }} className={`pult__progress`}></div>
 			</div>
 			<div className={`pult__trackname`}>
-				{currentTrackName && `Current track: ${currentTrackName}`}
+				{currentTrackName && (
+					<div className={styles.trackNameBlock}>
+						<span className={styles.trackPlayer}>Playing:</span>
+						<span>{toUpperFirst(currentTrackName)}</span>
+					</div>
+				)}
 			</div>
 			<div className={`pult__btnbox`}>
 				<span className={`pult__btn btn_toggle-play`} onClick={handlePlayPause}>

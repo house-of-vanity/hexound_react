@@ -1,0 +1,9 @@
+.trackNameBlock {
+    display: flex;
+    flex-direction: row;
+    column-gap: 4px;
+}
+
+.trackPlayer{
+    color:var(--text-secondary);
+}
