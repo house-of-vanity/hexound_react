@@ -26,6 +26,7 @@ export type TrackDictReducers = {
 		state: TrackDictState,
 		action: PayloadAction<boolean>
 	) => void;
+	reset: () => void;
 };
 
 export interface OnGetNextParams {

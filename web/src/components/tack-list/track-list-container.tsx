@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import React, { useCallback, useEffect } from "react";
+import { connect, useDispatch } from "react-redux";
 import { withRouter } from "react-router";
 // @ts-ignore
 import fp from "lodash/fp";
@@ -10,6 +10,7 @@ import {
 	setCurrentTrack,
 	getSingleTrack,
 } from "../../features/track-list/duck/actions";
+import { trackDictSlice } from "../../features/track-list/duck/slices";
 import { RootState } from "../../store/store";
 
 const TrackListContainer = (props: any) => {
@@ -19,6 +20,12 @@ const TrackListContainer = (props: any) => {
 			params: { trackID },
 		},
 	} = props;
+
+	const dispatch = useDispatch();
+
+	const onReset = useCallback(() => {
+		dispatch(trackDictSlice.actions.reset());
+	}, [dispatch]);
 
 	const handleGetTracks = () => {
 		const { getTrackList } = props;
@@ -31,7 +38,8 @@ const TrackListContainer = (props: any) => {
 		} else {
 			getTrackList();
 		}
-	}, [getTrackList, trackID]);
+		return () => onReset();
+	}, [getTrackList, trackID, onReset]);
 
 	return (
 		<TrackList
