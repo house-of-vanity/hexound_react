@@ -2,6 +2,7 @@ import React from "react";
 import "./TrackList.css";
 import { TrackItem } from "./track-item";
 import { TrackDTO, TrackDictDTO } from "../../api";
+import styles from "./track-list.module.scss";
 
 export interface TrackListProps {
 	isDeTouch: boolean;
@@ -49,12 +50,18 @@ const TrackList = (props: TrackListProps) => {
 	return (
 		<div className={`track-list`}>
 			<div className={`container`}>
-				<h2>TrackList</h2>
+				<div className={styles.listHead}>
+					<span />
+					<span>track</span>
+					<span>link</span>
+				</div>
 			</div>
+
 			<div className={`track-list__container`}>
 				<ul style={styleObj} className={`track-list__list`}>
-					{playList.map((id: any) => (
+					{playList.map((id: any, i) => (
 						<TrackItem
+							first={i === 0}
 							key={id}
 							onClick={handleOnClick}
 							track={trackList[id]}

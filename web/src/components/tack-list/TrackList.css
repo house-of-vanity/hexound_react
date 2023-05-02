@@ -3,6 +3,7 @@
 .track-list__list{
     display: block;
     padding: 0;
+    margin-top: 8px;
 }
 .track-list__list__item{
     /*display: block;*/

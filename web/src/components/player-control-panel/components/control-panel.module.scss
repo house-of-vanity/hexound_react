@@ -1,0 +1,55 @@
+.trackNameBlock {
+    display: flex;
+    flex-direction: row;
+    column-gap: 4px;
+}
+
+.trackPlayer{
+    color:var(--text-secondary);
+}
+
+.pult{
+    display: flex;
+    padding: 26px 20px 10px;
+    background: #ffffff;
+    border-bottom: solid 1px #e8e8e8;
+    box-shadow: 0px 4px 5px #00000020;
+    justify-content: space-between;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.pultTrackName, .pultBtnBox{
+    display: flex;
+    align-items: center;
+}
+
+.btnToggle {
+    display: flex;
+    flex: 0 0 40px;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    margin-left: 10px;
+    border-radius: 20px;
+    background: #22222210 !important;
+}
+.btnToggleActive {
+    background: #222222 !important;
+    color: #ffffff;
+}
+
+.linkIcon {
+    width: 16px;
+    color: var(--text-secondary);
+}
+
+.focusedIcon {
+    transition: transform ease-in 300ms;
+
+    &:focus{
+        outline-color: #ff5079;
+    }
+}

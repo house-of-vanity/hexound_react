@@ -11,6 +11,11 @@ import "./player.css";
 import { useProgress } from "../hooks/use-progress";
 import { usePlaying } from "../hooks/use-playing";
 import { player } from "../../../services";
+import { toUpperFirst } from "../../../utils/to-upper-first";
+import styles from "./control-panel.module.scss";
+import clsx from "clsx";
+import { ButtonIcon, useGoTrack } from "../../../common";
+import { LinkIcon } from "../../../icons/components";
 
 export interface GetNextTrackParams {
 	isRandom: boolean;
@@ -96,43 +101,68 @@ export const PlayerControlPanel = (props: PlayerControlPanelProps) => {
 		};
 	}, [handleNext]);
 
+	const goTrack = useGoTrack();
+
+	const onRequestGoTrack = useCallback(() => {
+		if (track) {
+			goTrack(track.id);
+		}
+	}, [track, goTrack]);
+
 	return (
-		<div className={`pult`}>
+		<div className={styles.pult}>
 			<div onClick={setProgress} className={`pult__progress-wrap`}>
 				<div style={{ width: percentW }} className={`pult__progress`}></div>
 			</div>
-			<div className={`pult__trackname`}>
-				{currentTrackName && `Current track: ${currentTrackName}`}
+			<div className={styles.pultTrackName}>
+				{currentTrackName && (
+					<div className={styles.trackNameBlock}>
+						<span className={styles.trackPlayer}>Playing:</span>
+						<span>
+							{toUpperFirst(currentTrackName)}{" "}
+							<ButtonIcon tabIndex={-1} onClick={onRequestGoTrack}>
+								<LinkIcon className={styles.linkIcon} />
+							</ButtonIcon>
+						</span>
+					</div>
+				)}
 			</div>
-			<div className={`pult__btnbox`}>
-				<span className={`pult__btn btn_toggle-play`} onClick={handlePlayPause}>
+			<div className={styles.pultBtnBox}>
+				<ButtonIcon className={styles.focusedIcon} onClick={handlePlayPause}>
 					{isPlaying ? (
 						<Pause width={"40px"} height={"40px"} />
 					) : (
 						<Play width={"35px"} height={"35px"} />
 					)}
-				</span>
-				<span className={`pult__btn btn_stop`} onClick={handleStop}>
+				</ButtonIcon>
+
+				<ButtonIcon className={styles.focusedIcon} onClick={handleStop}>
 					<Stop width={"40px"} height={"40px"} />
-				</span>
-				<span className={`pult__btn btn_stop`} onClick={handleNext}>
+				</ButtonIcon>
+
+				<ButtonIcon className={styles.focusedIcon} onClick={handleNext}>
 					<ForwardStep width={"40px"} height={"40px"} />
-				</span>
-				<span
-					className={`pult__btn btn_toggle ${isRandom && `active`}`}
+				</ButtonIcon>
+
+				<ButtonIcon
+					className={clsx(styles.btnToggle, styles.focusedIcon, {
+						[styles.btnToggleActive]: isRandom,
+					})}
 					onClick={onToggleRandom}
 					style={{ width: `40px` }}
 				>
 					<RandomIcon width={"20px"} height={"20px"} />
-				</span>
+				</ButtonIcon>
 
-				<span
-					className={`pult__btn btn_toggle  ${isLoop && `active`}`}
+				<ButtonIcon
+					className={clsx(styles.btnToggle, styles.focusedIcon, {
+						[styles.btnToggleActive]: isLoop,
+					})}
 					onClick={onToggleLoop}
 					style={{ width: `40px` }}
 				>
 					<LoopIcon width={"20px"} height={"20px"} />
-				</span>
+				</ButtonIcon>
 			</div>
 		</div>
 	);
