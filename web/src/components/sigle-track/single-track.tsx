@@ -50,7 +50,11 @@ export const SingleTrack = () => {
 				)}
 			</div>
 			{track && (
-				<PlayerControlPanel track={track} getNextTrack={getNextTrack} />
+				<PlayerControlPanel
+					track={track}
+					getNextTrack={getNextTrack}
+					autoplay={false}
+				/>
 			)}
 		</>
 	);

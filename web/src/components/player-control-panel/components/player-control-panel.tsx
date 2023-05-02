@@ -20,10 +20,11 @@ export interface GetNextTrackParams {
 export interface PlayerControlPanelProps {
 	track: TrackDTO | null;
 	getNextTrack: (params: GetNextTrackParams) => void;
+	autoplay?: boolean;
 }
 
 export const PlayerControlPanel = (props: PlayerControlPanelProps) => {
-	const { track, getNextTrack } = props;
+	const { track, getNextTrack, autoplay = true } = props;
 
 	const [isRandom, setRandom] = useState<boolean>(false);
 	const [isLoop, setLoop] = useState<boolean>(false);
@@ -36,13 +37,13 @@ export const PlayerControlPanel = (props: PlayerControlPanelProps) => {
 	}, []);
 
 	useEffect(() => {
-		if (track) {
+		if (track && autoplay) {
 			handlePlay(track);
 		}
 		return () => {
 			player.stop();
 		};
-	}, [handlePlay, track]);
+	}, [handlePlay, track, autoplay]);
 
 	const percent = useProgress();
 	const percentW = percent <= 1 ? `${percent * 100}%` : `100%`;
