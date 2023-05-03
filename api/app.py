@@ -132,7 +132,9 @@ def signin():
             log.info('Going to auth %s:%s', username, password)
             response = DB.signin(username, password)
             if response == []:
-                response = {'status': True, 'message': 'User created'}
+                response = {'status': True, 'message': 'User is correct'}
+            else:
+                response = {'status': False, 'message': 'User is incorrect'}
     return response
 
 # sign up mechanics
