@@ -1,33 +1,37 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { playerReducers } from "./redusers";
-import { onEnded } from "../features/track-list/duck/actions";
-import { trackDictSlice } from '../features/track-list/duck'
-import { player } from '../services'
+import { configureStore } from "@reduxjs/toolkit";
+import { rootReducer } from "./redusers";
+import {
+	persistStore,
+	persistReducer,
+	FLUSH,
+	REHYDRATE,
+	PAUSE,
+	PERSIST,
+	PURGE,
+	REGISTER,
+} from "redux-persist";
+import storage from "redux-persist/lib/storage";
+
+const persistConfig = {
+	key: "localPlayList",
+	version: 1,
+	storage,
+	whitelist: ["localPlayList"],
+};
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-	reducer: playerReducers
-})
+	reducer: persistedReducer,
+	middleware: (getDefaultMiddleware) =>
+		getDefaultMiddleware({
+			serializableCheck: {
+				ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+			},
+		}),
+});
 
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
+export const persistor = persistStore(store);
 
-// Add Player handlers
-(function (store) {
-	player.handlers.push({
-		eventName: "onEnded",
-		handler: function (params: any) {
-			// @ts-ignore
-			store.dispatch(onEnded());
-		},
-	});
-	player.addHandler("onAudioprocess", function (e: any) {
-		const postion = window.__PLAYER__.getPosition();
-		if (postion !== 0) {
-			const duration = window.__PLAYER__.duration();
-			const percent = parseFloat(postion) / parseFloat(duration);
-			store.dispatch(trackDictSlice.actions.setPercent(percent));
-		} else {
-			store.dispatch(trackDictSlice.actions.setPercent(0));
-		}
-	});
-})(store);
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

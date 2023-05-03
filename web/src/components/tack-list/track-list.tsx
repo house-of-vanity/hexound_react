@@ -1,22 +1,20 @@
 import React from "react";
-import "./TrackList.css";
 import { TrackItem } from "./track-item";
-import { TrackDTO, TrackDictDTO } from "../../api";
+import { TrackDTO } from "../../api";
+import styles from "./track-list.module.scss";
 
 export interface TrackListProps {
 	isDeTouch: boolean;
-	trackList: TrackDictDTO;
-	setCurrentTrack: (id: TrackDTO["id"]) => void;
-	currentTrack: TrackDTO;
+	setCurrentTrack: (track: TrackDTO) => void;
+	currentTrack: TrackDTO | null;
 	playList: TrackDTO[];
-	hendleGetTracks: () => void;
+	hendleGetTracks?: () => void;
 	hasItems: boolean;
 }
 
-const TrackList = (props: TrackListProps) => {
+export const TrackList = (props: TrackListProps) => {
 	const {
 		isDeTouch,
-		trackList,
 		setCurrentTrack,
 		currentTrack,
 		playList,
@@ -24,9 +22,9 @@ const TrackList = (props: TrackListProps) => {
 		hasItems,
 	} = props;
 
-	const handleOnClick = (trackID: TrackDTO["id"]) => {
+	const handleOnClick = (track: TrackDTO) => {
 		if (!isDeTouch) {
-			setCurrentTrack(trackList[String(trackID)]);
+			setCurrentTrack(track);
 		}
 	};
 
@@ -38,33 +36,32 @@ const TrackList = (props: TrackListProps) => {
 		}
 	};
 
-	let styleObj: Record<any, any> = {};
-
-	if (isDeTouch) {
-		styleObj.opacity = "0.6";
-	} else {
-		delete styleObj.opacity;
-	}
-
 	return (
-		<div className={`track-list`}>
+		<div>
 			<div className={`container`}>
-				<h2>TrackList</h2>
+				<div className={styles.listHead}>
+					<span />
+					<span>track</span>
+					<span>actions</span>
+					<span>link</span>
+				</div>
 			</div>
-			<div className={`track-list__container`}>
-				<ul style={styleObj} className={`track-list__list`}>
-					{playList.map((id: any) => (
+
+			<div className={styles.listRoot}>
+				<ul className={styles.listList}>
+					{playList.map((track, i) => (
 						<TrackItem
-							key={id}
+							first={i === 0}
+							key={track.id}
 							onClick={handleOnClick}
-							track={trackList[id]}
+							track={track}
 							getActive={getActive}
 						/>
 					))}
 				</ul>
 			</div>
 			<div className={`container`}>
-				{hasItems && <div onClick={hendleGetTracks}>Ещё</div>}
+				{hasItems && <div onClick={hendleGetTracks}>Load more</div>}
 			</div>
 		</div>
 	);

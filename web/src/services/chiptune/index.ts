@@ -5,6 +5,7 @@ export interface IChiptuneLib {
   modulePtr: any
   disconnect(): void
   cleanup(): void
+  stop(): void
 }
 
 export interface IAplicationChiptune {
@@ -138,6 +139,15 @@ if (ChiptuneJsPlayer) {
   ChiptuneJsPlayer.prototype.setPositionByPercent = function (percent) {
     const postion = this.duration() * percent
     if(this.setPosition) this.setPosition(postion);
+  }
+
+  ChiptuneJsPlayer.prototype.stop = function() {
+    if (this.currentPlayingNode != null) {
+      this.currentPlayingNode.player.fireEvent('onStop')
+      this.currentPlayingNode.disconnect();
+      this.currentPlayingNode.cleanup();
+      this.currentPlayingNode = null;
+    }
   }
 }
 
