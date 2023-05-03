@@ -1,6 +1,7 @@
 .track {
     display: grid;
-    grid-template-columns: 40px auto 40px;
+    grid-template-columns: 40px auto 80px 40px;
+    column-gap: 8px;
     padding: 12px 16px;
     border-bottom: solid 1px #e8e8e8;
     align-items: center;
@@ -16,7 +17,8 @@
 .listHead {
     margin-top: 16px;
     display: grid;
-    grid-template-columns: 40px auto 40px;
+    grid-template-columns: 40px auto 80px 40px;
+    column-gap: 8px;
     color:var(--text-secondary);
     text-transform: uppercase;
     font-weight: 600;
@@ -28,3 +30,26 @@
     flex-direction: row;
     align-items: center;
 }
+
+.linkIcon {
+    height: 20px;
+    width: 20px;
+    color: #ced4da;
+}
+
+.localPlayListIcon {
+    width: 16px;
+    color: var(--text-secondary);
+}
+
+.listRoot {
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.listList{
+    display: block;
+    padding: 0;
+    margin-top: 8px;
+}
+

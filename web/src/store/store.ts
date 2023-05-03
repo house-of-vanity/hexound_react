@@ -1,21 +1,37 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { playerReducers } from "./redusers";
-// import { onEnded } from "../features/track-list/duck/actions";
-// import { player } from '../services'
+import { configureStore } from "@reduxjs/toolkit";
+import { rootReducer } from "./redusers";
+import {
+	persistStore,
+	persistReducer,
+	FLUSH,
+	REHYDRATE,
+	PAUSE,
+	PERSIST,
+	PURGE,
+	REGISTER,
+} from "redux-persist";
+import storage from "redux-persist/lib/storage";
+
+const persistConfig = {
+	key: "localPlayList",
+	version: 1,
+	storage,
+	whitelist: ["localPlayList"],
+};
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-	reducer: playerReducers
-})
+	reducer: persistedReducer,
+	middleware: (getDefaultMiddleware) =>
+		getDefaultMiddleware({
+			serializableCheck: {
+				ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+			},
+		}),
+});
 
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
+export const persistor = persistStore(store);
 
-// Add Player handlers
-// (function (store) {
-// 	player.handlers.push({
-// 		eventName: "onEnded",
-// 		handler: function (params: any) {
-// 			store.dispatch(onEnded());
-// 		},
-// 	});
-// })(store);
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

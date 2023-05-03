@@ -6,11 +6,12 @@ import styles from "./track-list.module.scss";
 import clsx from "clsx";
 import { useGoTrack } from "../../common";
 import { useCallback } from "react";
+import { LocalPlayListActions } from "./local-playlist-actions";
 
 export interface TrackItemProps {
 	track: TrackDTO;
 	getActive: (id: TrackDTO["id"]) => string;
-	onClick: (id: TrackDTO["id"]) => void;
+	onClick: (id: TrackDTO) => void;
 	first: boolean;
 }
 
@@ -25,25 +26,27 @@ export const TrackItem = (props: TrackItemProps) => {
 		(event: React.KeyboardEvent) => {
 			const { key } = event;
 			if (key === "Enter") {
-				onClick(id);
+				onClick(track);
 			}
 		},
-		[onClick, id]
+		[onClick, track]
 	);
 
 	return (
 		<li
 			className={clsx(styles.track, { [styles.trackActive]: isActive })}
 			key={id}
-			onClick={() => onClick(id)}
+			onClick={() => onClick(track)}
 			role="button"
 			{...(!isActive && first ? { tabIndex: 1 } : {})}
 			onKeyDown={onKeyDown}
 		>
 			<span />
 			{toUpperFirst(title)}
+			<LocalPlayListActions track={track} />
+
 			<span className={styles.linkBox} onClick={() => goTrack(id)}>
-				<LinkIcon className="link-icon" />
+				<LinkIcon className={styles.linkIcon} />
 			</span>
 		</li>
 	);

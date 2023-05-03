@@ -28,8 +28,3 @@ export type TrackDictReducers = {
 	) => void;
 	reset: () => void;
 };
-
-export interface OnGetNextParams {
-	isRandom: boolean;
-	isLoop: boolean;
-}
