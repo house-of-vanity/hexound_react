@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import XakPlant from "../CreditsIcon/Xakplant";
 import Github from "../CreditsIcon/Github";
 // @ts-ignore
@@ -11,7 +11,6 @@ import {
 	useToLocalPlayList,
 } from "../../features/local-play-list/hooks";
 import { ItunesNoteIcon } from "../../icons/components";
-import GitInfo from "react-git-info/macro";
 
 export const Credits = () => {
 	const history = useHistory();
@@ -20,13 +19,6 @@ export const Credits = () => {
 	const onGoLocalList = useToLocalPlayList();
 	const localPlayList = useLocalPlayList();
 	const hasLocal = localPlayList.length > 0;
-
-	const [shaShort, setShaShort] = useState("");
-
-	useEffect(() => {
-		const gitInfo = GitInfo();
-		setShaShort(gitInfo.commit.shortHash);
-	}, [setShaShort]);
 
 	return (
 		<div className={styles.credits}>
@@ -41,7 +33,7 @@ export const Credits = () => {
 			</div>
 			<div onClick={goToMain} className={styles.title}>
 				Hexound v2
-				<span className={styles.subTitle}>chiptune web-player {shaShort}</span>
+				<span className={styles.subTitle}>chiptune web-player</span>
 			</div>
 			{hasLocal && (
 				<div>
