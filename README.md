@@ -8,5 +8,5 @@ Powered by libopenmpt
 
 ### Authors
 
-* Alexandr Bogomyakov (@house-of-vanity)
+* A B (@house-of-vanity)
 * Boris Cherepanov (@xakplant)
