@@ -1,0 +1,47 @@
+import React, { useCallback } from "react";
+import { PlusIcon, MinusIcon } from "../../icons/components";
+import { ButtonIcon } from "../../common";
+import {
+	useTrackInLocalPlayList,
+	useLocalPlayListActions,
+} from "../../features/local-play-list/hooks";
+import { TrackDTO } from "../../api";
+import styles from "./track-list.module.scss";
+
+export interface LocalPlayListActionsProps {
+	track: TrackDTO;
+}
+
+export const LocalPlayListActions = (props: LocalPlayListActionsProps) => {
+	const { track } = props;
+	const inPlayList = useTrackInLocalPlayList(track);
+	const { add, remove } = useLocalPlayListActions();
+
+	const onClick = useCallback(
+		(e: React.MouseEvent<HTMLButtonElement>) => {
+			e.stopPropagation();
+			if (inPlayList) {
+				remove(track);
+			} else {
+				add(track);
+			}
+		},
+		[add, remove, track, inPlayList]
+	);
+
+	const label = inPlayList
+		? "Remove from local play list"
+		: "Add to local play list";
+
+	return (
+		<div>
+			<ButtonIcon tabIndex={-1} title={label} onClick={onClick}>
+				{inPlayList ? (
+					<MinusIcon className={styles.localPlayListIcon} />
+				) : (
+					<PlusIcon className={styles.localPlayListIcon} />
+				)}
+			</ButtonIcon>
+		</div>
+	);
+};

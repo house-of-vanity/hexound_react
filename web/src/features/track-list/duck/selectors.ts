@@ -1,8 +1,8 @@
 import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "../../../store/store";
 import { TrackDTO } from "../../../api";
-import { shuffle } from "./utils";
-import { OnGetNextParams } from "./types";
+import { OnGetNextParams } from "../../shared";
+import { getNextTrackUtil } from "../../shared";
 
 const getTrackList = (state: RootState) => state.playerData.dict;
 
@@ -11,7 +11,7 @@ export const getArrTracks = createSelector([getTrackList], (trackObject) =>
 );
 
 export const getPlayList = createSelector([getTrackList], (trackList) =>
-	Object.keys(trackList)
+	Object.values(trackList)
 );
 
 export const getCurrentTrack = (state: RootState) =>
@@ -22,20 +22,6 @@ export const getIsRandom = (state: RootState, params: OnGetNextParams) =>
 
 export const getNextTrack = createSelector(
 	[getArrTracks, getCurrentTrack, getIsRandom],
-	(tracks, currentTrack, params): TrackDTO | null => {
-		const { isRandom, isLoop } = params;
-		// Учесть нужно ли рандомно переключить
-		const shuffleTracks = isRandom ? shuffle(Object.values(tracks)) : tracks;
-
-		const currentTrackIndex = shuffleTracks.findIndex(
-			({ id }) => id === currentTrack?.id
-		);
-		const nextTrack = shuffleTracks[currentTrackIndex + 1];
-
-		if (!nextTrack && isLoop) {
-			return shuffleTracks[0];
-		}
-
-		return nextTrack || null;
-	}
+	(tracks, currentTrack, params): TrackDTO | null =>
+		getNextTrackUtil(tracks, currentTrack, params)
 );

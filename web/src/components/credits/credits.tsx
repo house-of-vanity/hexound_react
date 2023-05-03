@@ -5,11 +5,20 @@ import Github from "../CreditsIcon/Github";
 import logo from "../../icons/hexound_logo.png";
 import { useHistory } from "react-router";
 import styles from "./credits.module.scss";
+import { ButtonIcon } from "../../common";
+import {
+	useLocalPlayList,
+	useToLocalPlayList,
+} from "../../features/local-play-list/hooks";
+import { ItunesNoteIcon } from "../../icons/components";
 
 export const Credits = () => {
 	const history = useHistory();
 
 	const goToMain = () => history.push("/");
+	const onGoLocalList = useToLocalPlayList();
+	const localPlayList = useLocalPlayList();
+	const hasLocal = localPlayList.length > 0;
 
 	return (
 		<div className={styles.credits}>
@@ -25,6 +34,18 @@ export const Credits = () => {
 			<div onClick={goToMain} className={styles.title}>
 				Hexound v2 <span className={styles.subTitle}>chiptune web-player</span>
 			</div>
+			{hasLocal && (
+				<div>
+					<ButtonIcon
+						title="local play list"
+						className={styles.playListIcon}
+						onClick={onGoLocalList}
+					>
+						<ItunesNoteIcon />
+					</ButtonIcon>
+				</div>
+			)}
+
 			<div>
 				<a
 					style={{ color: "#000000" }}

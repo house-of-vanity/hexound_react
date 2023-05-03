@@ -12,6 +12,7 @@
     top: 0;
     left: 0;
     right: 0;
+    column-gap: 8px;
 }
 
 .title{
@@ -29,4 +30,8 @@
     font-size: 12px;
     font-weight: 100;
     text-transform: lowercase;
+}
+.playListIcon{
+    width: 16px;
+    color: var(--text-secondary);
 }

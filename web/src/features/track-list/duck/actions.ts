@@ -6,7 +6,7 @@ import { TrackDictDTO, TrackDTO } from "../../../api";
 import { AppDispatch, RootState } from "../../../store/store";
 import { getNextTrack } from "./selectors";
 import { trackDictSlice } from "./slices";
-import { OnGetNextParams } from "./types";
+import { OnGetNextParams } from "../../shared";
 
 const { actions } = trackDictSlice;
 

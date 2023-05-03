@@ -3,15 +3,15 @@ import { connect, useDispatch } from "react-redux";
 import { withRouter } from "react-router";
 // @ts-ignore
 import fp from "lodash/fp";
-import { getPlayList } from "../../features/track-list/duck/selectors";
-import TrackList from "./track-list";
+import { getPlayList } from "../../track-list/duck/selectors";
+import TrackList from "../../../components/tack-list/track-list";
 import {
 	getTrackList,
 	setCurrentTrack,
 	getSingleTrack,
-} from "../../features/track-list/duck/actions";
-import { trackDictSlice } from "../../features/track-list/duck/slices";
-import { RootState } from "../../store/store";
+} from "../../track-list/duck/actions";
+import { trackDictSlice } from "../../track-list/duck/slices";
+import { RootState } from "../../../store/store";
 
 const TrackListContainer = (props: any) => {
 	const { hasItems, getTrackList } = props;
@@ -45,7 +45,6 @@ const TrackListContainer = (props: any) => {
 		<TrackList
 			hasItems={hasItems}
 			playList={props.playList}
-			trackList={props.trackList}
 			setCurrentTrack={props.setCurrentTrack}
 			isDeTouch={props.isDeTouch}
 			hendleGetTracks={handleGetTracks}
