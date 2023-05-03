@@ -4,3 +4,4 @@ mp3s/
 web/build/
 uploads/
 __pycache__/
+.DS_Store

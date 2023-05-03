@@ -121,7 +121,7 @@ def upload_file():
     <code>find . -exec curl -X POST -F file=@"{{}}" http://localhost:5000/upload \;</code>
     '''
 
-# sing in mechanics
+# sign in mechanics
 @app.route(f"{API_ROOT}/user/signin", methods=['GET', 'POST'])
 def signin():
     response = {'status': False, 'message': 'An error occured. POST "user" and "pass" headers here.'}
@@ -132,10 +132,12 @@ def signin():
             log.info('Going to auth %s:%s', username, password)
             response = DB.signin(username, password)
             if response == []:
-                response = {'status': True, 'message': 'User created'}
+                response = {'status': True, 'message': 'User is correct'}
+            else:
+                response = {'status': False, 'message': 'User is incorrect'}
     return response
 
-# sing up mechanics
+# sign up mechanics
 @app.route(f"{API_ROOT}/user/signup", methods=['GET', 'POST'])
 def signup():
     response = {'status': False, 'message': 'An error occured. POST "user" and "pass" headers here.'}
