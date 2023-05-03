@@ -6,7 +6,7 @@ import styles from "./track-list.module.scss";
 import clsx from "clsx";
 import { useGoTrack } from "../../common";
 import { useCallback } from "react";
-import { LocalPlayListActions } from "./local-playlist-actions";
+import { LocalPlayListActions } from "../../features/local-play-list/components";
 
 export interface TrackItemProps {
 	track: TrackDTO;

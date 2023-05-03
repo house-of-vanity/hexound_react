@@ -11,11 +11,10 @@ import "./player.css";
 import { useProgress } from "../hooks/use-progress";
 import { usePlaying } from "../hooks/use-playing";
 import { player } from "../../../services";
-import { toUpperFirst } from "../../../utils/to-upper-first";
 import styles from "./control-panel.module.scss";
 import clsx from "clsx";
-import { ButtonIcon, useGoTrack } from "../../../common";
-import { LinkIcon } from "../../../icons/components";
+import { ButtonIcon } from "../../../common";
+import { TrackView } from "./track-view";
 
 export interface GetNextTrackParams {
 	isRandom: boolean;
@@ -62,8 +61,6 @@ export const PlayerControlPanel = (props: PlayerControlPanelProps) => {
 		player.setPositionByPercent(percent);
 	};
 
-	const currentTrackName = track === null ? "" : track.title;
-
 	const isPlaying = usePlaying();
 
 	const handlePlayPause = () => {
@@ -101,32 +98,12 @@ export const PlayerControlPanel = (props: PlayerControlPanelProps) => {
 		};
 	}, [handleNext]);
 
-	const goTrack = useGoTrack();
-
-	const onRequestGoTrack = useCallback(() => {
-		if (track) {
-			goTrack(track.id);
-		}
-	}, [track, goTrack]);
-
 	return (
 		<div className={styles.pult}>
 			<div onClick={setProgress} className={`pult__progress-wrap`}>
 				<div style={{ width: percentW }} className={`pult__progress`}></div>
 			</div>
-			<div className={styles.pultTrackName}>
-				{currentTrackName && (
-					<div className={styles.trackNameBlock}>
-						<span className={styles.trackPlayer}>Playing:</span>
-						<span>
-							{toUpperFirst(currentTrackName)}{" "}
-							<ButtonIcon tabIndex={-1} onClick={onRequestGoTrack}>
-								<LinkIcon className={styles.linkIcon} />
-							</ButtonIcon>
-						</span>
-					</div>
-				)}
-			</div>
+			{track ? <TrackView track={track} /> : <div />}
 			<div className={styles.pultBtnBox}>
 				<ButtonIcon className={styles.focusedIcon} onClick={handlePlayPause}>
 					{isPlaying ? (

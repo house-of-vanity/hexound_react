@@ -1,12 +1,9 @@
 import React, { useCallback } from "react";
-import { PlusIcon, MinusIcon } from "../../icons/components";
-import { ButtonIcon } from "../../common";
-import {
-	useTrackInLocalPlayList,
-	useLocalPlayListActions,
-} from "../../features/local-play-list/hooks";
-import { TrackDTO } from "../../api";
-import styles from "./track-list.module.scss";
+import { PlusIcon, MinusIcon } from "../../../../icons/components";
+import { ButtonIcon } from "../../../../common";
+import { useTrackInLocalPlayList, useLocalPlayListActions } from "../../hooks";
+import { TrackDTO } from "../../../../api";
+import styles from "./local-play-list-actions.module.scss";
 
 export interface LocalPlayListActionsProps {
 	track: TrackDTO;
